@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>
+	
+	
+		组件式开发 | 
+	Hexo
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+<link rel="stylesheet" href="/css/index.css">
+
+	
+<link rel="stylesheet" href="/css/nprogress.css">
+
+	
+<script src="/js/jquery-2.2.4.min.js"></script>
+
+	
+<script src="/js/lazyload.js"></script>
+
+	
+<script src="/js/nprogress.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+	<div id="container">
+		<div id="header" >
+			<div class="headerbg">
+				<div class="header-title">
+					<h1><a href="/">Hexo</a></h1>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div class="content">
+			<div class="wrap articlepage">
+<div class="breadcrumbs">
+	<h6>
+		<a href="/">Home</a>
+		<span class="partition">|</span>
+		<a href="/archives/2018">
+			2018
+		</a>
+		<span class="partition">|</span>
+		<span>组件式开发</span>
+	</h6>
+</div>
+<div class="typo article">
+	<div class="article-meta">
+	
+	<h1 class="article-title article-title-frompost" itemprop="name">
+		组件式开发
+	</h1>
+
+	<time class="article-date" datetime="2018-12-29T07:17:06.901Z" itemprop="datePublished">
+	2018-12-29
+	</time>
+	
+</div>
+	<div class="article-body">
+		<div class="article-content">
+			 
+				<time class="article-date-true" datetime="2018-12-29T07:17:06.901Z" itemprop="datePublished">
+					2018-12-29
+				</time>
+				<h1 id="组件式开发"><a href="#组件式开发" class="headerlink" title="组件式开发"></a>组件式开发</h1><p>#积累/react</p>
+<h3 id="组件再分离"><a href="#组件再分离" class="headerlink" title="组件再分离"></a>组件再分离</h3><p>组件分离为颗粒度更细的组件，是纯粹的、木偶式的 ，可以在真实业务中进行任意组合。</p>
+<h3 id="逻辑再抽象"><a href="#逻辑再抽象" class="headerlink" title="逻辑再抽象"></a>逻辑再抽象</h3><p>组件中的相同交互逻辑和业务逻辑也应该进行抽象。 </p>
+<ol>
+<li><p>接口数据请求的抽象<br>数据请求的逻辑提升到高阶组件，把数据作为props属性赋予子组件。<br>可以结合context</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">const asyncSelectDecorator &#x3D; WrappedComponent &#x3D;&gt; &#123;</span><br><span class="line">  class AsyncSelectDecorator extends Component &#123;</span><br><span class="line">    componentDidMount () &#123;</span><br><span class="line">      const &#123;url, params&#125; &#x3D; this.props;</span><br><span class="line">      fetch (url, &#123;params&#125;).then (data &#x3D;&gt; &#123;</span><br><span class="line">        this.setState (&#123;</span><br><span class="line">          data,</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    render () &#123;</span><br><span class="line">      return &lt;WrappedComponent &#123;...this.props&#125; data&#x3D;&#123;this.state.data&#125; &#x2F;&gt;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return AsyncSelectDecorator;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>组件交互逻辑和状态抽象<br>将SearchInput 与 List 的交互的状态data和keyword，以及改变状态的方法抽取出来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 完成 SearchInput 与 List 的交互</span><br><span class="line">const searchDecorator &#x3D; WrappedComponent &#x3D;&gt; &#123;</span><br><span class="line">  class SearchDecorator extends Component &#123;</span><br><span class="line">    constructor (props) &#123;</span><br><span class="line">      super (props);</span><br><span class="line">      this.handleSearch &#x3D; this.handleSearch.bind (this);</span><br><span class="line">    &#125;</span><br><span class="line">    handleSearch (keyword) &#123;</span><br><span class="line">      this.setState (&#123;</span><br><span class="line">        data: this.props.data,</span><br><span class="line">        keyword,</span><br><span class="line">      &#125;);</span><br><span class="line">      this.props.onSearch (keyword);</span><br><span class="line">    &#125;</span><br><span class="line">    render () &#123;</span><br><span class="line">      const &#123;data, keyword&#125; &#x3D; this.state;</span><br><span class="line">      return (</span><br><span class="line">        &lt;WrappedComponent</span><br><span class="line">          &#123;...this.props&#125;</span><br><span class="line">          data&#x3D;&#123;data&#125;</span><br><span class="line">          keyword&#x3D;&#123;keyword&#125;</span><br><span class="line">          onSearch&#x3D;&#123;this.handleSearch&#125;</span><br><span class="line">        &#x2F;&gt;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return SearchDecorator;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>组件式开发的最终效果<br><img src="%E7%BB%84%E4%BB%B6%E5%BC%8F%E5%BC%80%E5%8F%91/C8AC4E3B-EC54-49C5-8EC4-3D6CC919F325.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">const FinalSelector &#x3D; compose (</span><br><span class="line">  asyncSelectDecorator,</span><br><span class="line">  searchDecorator,</span><br><span class="line">  selectedItemDecorator</span><br><span class="line">) (Selector);</span><br><span class="line">class SearchSelect extends Component &#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;FinalSelector &#123;...this.props&#125;&gt;</span><br><span class="line">        &lt;SelectInput &#x2F;&gt; </span><br><span class="line">		  &lt;SearchInput &#x2F;&gt;</span><br><span class="line">		  &lt;List &#x2F;&gt;</span><br><span class="line">      &lt;&#x2F;FinalSelector&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+
+				
+			
+		</div>
+	</div>
+</div>
+
+
+</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="footer-container">
+			<div class="wrap">
+				<div class="personallogo">
+					<svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							 width="227.792px" height="368.981px" viewBox="0 0 227.792 368.981" style="enable-background:new 0 0 227.792 368.981;"
+							 xml:space="preserve">
+						<style type="text/css">
+							.st0{fill:#FFF100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st1{fill:#F39A00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st2{fill:#FABF00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st3{fill:#FFD900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st4{fill:#F18900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st5{fill:#F5A200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st6{fill:#FFEA00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st7{fill:#FCC800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st8{fill:#F8B100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st9{fill:#FDD100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st10{fill:#FFE200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st11{fill:#ED6F00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st12{fill:#F08000;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st13{fill:#F29100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st14{fill:#F6A900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st15{fill:#EE7800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							#logo g polygon {
+								transition: all .8s;
+							}
+							#logo:hover g polygon:nth-of-type(4n+1){
+								-webkit-transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+2){
+								-webkit-transform: translate(12%, 56%) scale(.5)  translateZ(0);
+								transform: translate(12%, 56%) scale(.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+3){
+								-webkit-transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n){
+								-webkit-transform: translate(-33%, 60%) scale(1) translateZ(0);
+								transform: translate(33%, 60%) scale(1) translateZ(0);
+								opacity: .3;
+							}				
+						</style>
+						<g>
+							<polygon class="st2" points="66.232,65.812 40.521,80.656 14.81,95.5 14.81,65.812 14.81,36.125 40.521,50.968 	"/>
+							<polygon class="st3" points="66.231,65.812 91.943,50.968 117.654,36.125 117.654,65.812 117.654,95.5 91.943,80.656 	"/>
+							<polygon class="st8" points="14.81,95.557 40.521,80.713 66.232,65.869 66.232,95.557 66.232,125.245 40.521,110.401 	"/>
+							<polygon class="st14" points="66.232,125.245 40.521,140.089 14.81,154.933 14.81,125.245 14.81,95.557 40.521,110.401 	"/>
+							<polygon class="st5" points="14.81,154.989 40.521,140.146 66.232,125.302 66.232,154.989 66.232,184.677 40.521,169.833 	"/>
+							<polygon class="st1" points="66.232,184.621 40.521,199.463 14.81,214.308 14.81,184.621 14.81,154.933 40.521,169.776 	"/>
+							<polygon class="st7" points="66.232,184.62 91.943,169.776 117.654,154.933 117.654,184.62 117.654,214.308 91.943,199.463 	"/>
+							<polygon class="st13" points="14.81,214.366 40.521,199.521 66.232,184.677 66.232,214.366 66.232,244.053 40.521,229.209 	"/>
+							<polygon class="st8" points="117.654,214.366 91.943,229.209 66.232,244.053 66.232,214.366 66.232,184.677 91.943,199.521 	"/>
+							<polygon class="st10" points="169.076,65.812 143.365,80.656 117.654,95.5 117.654,65.812 117.654,36.125 143.365,50.968 	"/>
+							<polygon class="st9" points="117.654,36.125 91.943,50.969 66.232,65.812 66.232,36.125 66.232,6.437 91.943,21.281 	"/>
+							<polygon class="st6" points="117.654,95.556 143.364,80.712 169.076,65.869 169.076,95.556 169.076,125.245 143.364,110.401 	"/>
+							<polygon class="st0" points="220.498,95.558 194.789,110.402 169.078,125.245 169.078,95.558 169.076,65.87 194.789,80.713 	"/>
+							<polygon class="st4" points="66.232,244.053 40.521,258.897 14.81,273.741 14.81,244.053 14.81,214.366 40.521,229.209 	"/>
+							<polygon class="st12" points="14.81,273.797 40.521,258.954 66.232,244.11 66.232,273.797 66.232,303.485 40.521,288.642 	"/>
+							<polygon class="st7" points="14.81,36.124 40.52,21.279 66.231,6.437 66.231,36.124 66.232,65.812 40.52,50.968 	"/>
+							<polygon class="st3" points="169.076,184.678 143.367,199.522 117.656,214.366 117.656,184.678 117.654,154.99 143.367,169.833 	
+								"/>
+							<polygon class="st15" points="66.232,303.486 40.521,318.331 14.81,333.172 14.81,303.486 14.81,273.797 40.521,288.642 	"/>
+							<polygon class="st11" points="14.81,333.172 40.521,318.331 66.232,303.486 66.232,333.172 66.232,362.862 40.521,348.018 	"/>
+						</g>
+					</svg>
+				</div>
+				<div class="somelink">
+					<div class="label">
+						我喜欢拍照
+						<h3><a href="/photos">照片</a></h3>
+					</div>
+					<div class="label">
+						所有文章
+						<h3><a href="/archives">归档</a></h3>
+					</div>
+					<div class="label">
+						想说些什么？
+						<h3><a href="/about">留言</a></h3>
+					</div>
+					<div class="label">
+						我在找实习找实习
+						<h3><a href="#">简历</a></h3>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div id="widget">
+			<div id="toTop">
+				<i class="indicator iconfont">&#xe664;</i>
+			</div>
+		</div>
+	</div>
+	
+<script src="/js/index.js"></script>
+
+</body>
+</html>

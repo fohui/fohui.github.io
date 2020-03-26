@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>
+	
+	
+		前端性能优化 | 
+	Hexo
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+<link rel="stylesheet" href="/css/index.css">
+
+	
+<link rel="stylesheet" href="/css/nprogress.css">
+
+	
+<script src="/js/jquery-2.2.4.min.js"></script>
+
+	
+<script src="/js/lazyload.js"></script>
+
+	
+<script src="/js/nprogress.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+	<div id="container">
+		<div id="header" >
+			<div class="headerbg">
+				<div class="header-title">
+					<h1><a href="/">Hexo</a></h1>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div class="content">
+			<div class="wrap articlepage">
+<div class="breadcrumbs">
+	<h6>
+		<a href="/">Home</a>
+		<span class="partition">|</span>
+		<a href="/archives/2020">
+			2020
+		</a>
+		<span class="partition">|</span>
+		<span>前端性能优化</span>
+	</h6>
+</div>
+<div class="typo article">
+	<div class="article-meta">
+	
+	<h1 class="article-title article-title-frompost" itemprop="name">
+		前端性能优化
+	</h1>
+
+	<time class="article-date" datetime="2020-03-11T06:44:01.494Z" itemprop="datePublished">
+	2020-03-11
+	</time>
+	
+</div>
+	<div class="article-body">
+		<div class="article-content">
+			 
+				<time class="article-date-true" datetime="2020-03-11T06:44:01.494Z" itemprop="datePublished">
+					2020-03-11
+				</time>
+				<h1 id="前端性能优化"><a href="#前端性能优化" class="headerlink" title="前端性能优化"></a>前端性能优化</h1><p>#积累/性能优化</p>
+<h2 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h2><h3 id="Performance关键时间点"><a href="#Performance关键时间点" class="headerlink" title="Performance关键时间点"></a>Performance关键时间点</h3><p><img src="https://s1.ax1x.com/2020/03/26/8xXShT.png" alt=""></p>
+<ol>
+<li>首次绘制 (First Paint)<br>渲染进程确认要渲染当前的请求后，渲染进程会创建一个空白页面，创建空白页面的这个时间点称为FP。<br>FP 时间过久，说明HTML 文件可能由于网络原因导致加载时间过久</li>
+<li>首次有效绘制 (First Content Paint)<br>然后，渲染进程继续请求关键资源，请求完关键资源之后才会执行进一步的绘制，当页面中绘制了第一个像素时，我们把这个时间点称为 FCP。</li>
+<li>首屏时间 (Largest Content Paint)<br>接下来继续执行 JavaScript 脚本，当首屏内容完全绘制完成时，把这个时间点称为 LCP。<br>LCP时间过长，说明加载关键资源花的时间过久，也有可能是 JavaScript 执行过程中所花的时间过久</li>
+<li>DOMContentLoad事件<br>接下来 JavaScript 脚本执行结束，渲染进程判断该页面的 DOM 生成完毕，于是触发 DOMContentLoad 事件。</li>
+<li>onload事件<br>等所有资源都加载结束之后，再触发 onload 事件。</li>
+</ol>
+<h3 id="Audits-Lighthouse性能指标"><a href="#Audits-Lighthouse性能指标" class="headerlink" title="Audits/Lighthouse性能指标"></a>Audits/Lighthouse性能指标</h3><ul>
+<li>首次绘制 (First Paint)</li>
+<li>首次有效绘制 (First Meaningfull Paint)</li>
+<li>首屏时间 (Speed Index)，就是LCP</li>
+<li>首次 CPU 空闲时间 (First CPU Idle)<br>也称为最小可交互时间First Interactive，表示页面达到最小化可交互的时间。要缩短首次 CPU 空闲时长，我们就需要尽可能快地加载完关键资源，尽可能快地渲染出来首屏内容。</li>
+<li>完全可交互时间 (Time to Interactive)<br>简称TTI，表示页面中所有元素都达到了可交互的时长。所有的 JavaScript 事件已经注册完成，页面能够对用户的交互做出快速响应。缩短TTI，可以推迟执行一些和生成页面无关的 JavaScript 工作</li>
+<li>最大估计输入延时 (Max Potential First Input Delay)<br>Web 页面在加载最繁忙的阶段， 窗口中响应用户输入所需的时间。缩短该延时，可以使用 WebWorker 来执行一些计算，从而释放主线程；或者重构 CSS 选择器，以确保它们执行较少的计算。</li>
+</ul>
+<hr>
+<h2 id="加载阶段"><a href="#加载阶段" class="headerlink" title="加载阶段"></a>加载阶段</h2><p>加载阶段的优化目标是：让页面更快地显示和响应。从指标上看，就是<strong>缩短首次绘制(FP)和首屏时间(LCP)之间的时间差</strong>。需用通过优化关键资源来实现。</p>
+<p>能阻塞网页首次渲染的资源称为关键资源，关键资源会影响首屏时间和最小可交互时间。优化方向如下：</p>
+<ul>
+<li>关键资源个数<br>优化：减少关键资源的个数<br>将 JavaScript 和 CSS 改成内联的形式；<br>JavaScript 代码没有 DOM 或者 CSSOM 的操作，则可以改成 async 或者 defer 属性，变为非关键资源；<br>::CSS如何变为非关键资源？::</li>
+<li>关键资源大小<br>优化：<br>可以压缩 CSS 和 JavaScript 资源，移除 HTML、CSS、JavaScript 文件中一些注释内容</li>
+<li>请求关键资源需要多少个 RTT（Round Trip Time）<br>TCP 协议传输一个文件时，由于 TCP 的特性，这个数据并不是一次传输到服务端的，而是需要拆分成一个个数据包来回多次进行传输的。RTT 就是单个数据包的往返时延，表示从发送端发送数据开始，到发送端收到来自接收端的确认，总共经历的时延。<br>通常 1 个 HTTP 的数据包在 14KB 左右，所以 1 个 0.1M 的页面就需要拆分成 8 个包来传输了，也就是说需要 8 个 RTT。<br>优化：<br>减少关键资源的个数和减少关键资源的大小搭配实现；<br>使用 CDN 来减少每次 RTT 时长</li>
+</ul>
+<h3 id="网络情况"><a href="#网络情况" class="headerlink" title="网络情况"></a>网络情况</h3><p><strong>下载概况</strong><br>DOMContentLoaded时间：页面构建完成DOM所需要的时间，包括构建DOM所需要的HTML、JavaScript、CSS文件下载时间；<br>Load时间：浏览器加载完所有资源的时间，包括图片、样式表等。</p>
+<p><strong>单个资源时间线</strong><br><img src="https://s1.ax1x.com/2020/03/26/8zpzqg.png" alt=""></p>
+<ul>
+<li>HTTP 请求的基础流程<br>发起一个 HTTP 请求之后，浏览器首先查找缓存，如果缓存没有命中，那么继续发起 DNS 请求获取 IP 地址，然后利用 IP 地址和服务器端建立 TCP 连接，再发送 HTTP 请求，等待服务器响应；不过，如果服务器响应头中包含了重定向的信息，那么整个流程就需要重新再走一遍。</li>
+<li>时间描述<br><img src="https://s1.ax1x.com/2020/03/26/8z9VMT.png" alt=""><br>Queuing：请求排队时间。浏览器发起的请求不能立即执行，等待所需要的时间；<br>Stalled：停止时间。排队完成，发起链接之前，可能导致连接过程被推迟；<br>Proxy Negotiation：代理服务器连接协商所用的时间。请求使用了代理服务器所需要的协商时间；<br>Initial connection/SSL：和服务器建立连接所用的时间。包括TCP连接需要的时间，SSL 握手时间；<br>Request sent：和服务器建立连接之后，发送请求数据花费的时间；<br>Waiting (TTFB)第一字节时间：发送请求之后，到接收到服务器返回的第一个字节数据所用的时间。TTFB 是反映服务端响应速度的重要指标；<br>接收到第一个字节之后<br>Content Download：浏览器接收到第一个字节，到接收到全部响应数据所用的时间。</li>
+</ul>
+<p>::对单资源的优化::</p>
+<ul>
+<li>Queuing时间过久<br>原因：排队时间过程，可能是是浏览器为每个域名最多维护6个连接。<br>优化措施：<br>一个站点的资源放在多个域名下；<br>站点升级到http2，去掉了每个域名最多维护6个连接的限制。</li>
+<li>TTFB时间过长<br>原因：服务器响应太慢<br>优化措施：<br>获取数据时间过长，增加缓存技术；<br>网络拖慢，则可以使用CDN来缓存静态文件；<br>请求头带了过多信息，减少不必要的cookie信息。</li>
+<li>Content Download时间过长<br>原因：文件过大<br>优化措施：减少文件大小，压缩或去除不必要的注释等。</li>
+</ul>
+<hr>
+<h2 id="交互阶段"><a href="#交互阶段" class="headerlink" title="交互阶段"></a>交互阶段</h2><p>交互阶段优化指的就是<strong>优化渲染帧的速度</strong>，决定了交互流畅度。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>交互阶段没有加载关键资源和构建DOM、CSSOM流程，通常就是由JavaScript触发交互动画；</li>
+<li>交互导致布局信息修改，就会触发重排操作，触发后续一系列操作；</li>
+<li>交互没有导致布局改变，则直接进入绘制阶段，触发重绘操作；</li>
+<li>通过CSS 实现一些变形、渐变、动画等特效，不会触发重排或重绘，只会影响合成，而合成是非常快的。</li>
+</ul>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>优化的一大原则是：<strong>让单个帧的生成速度变快</strong>。</p>
+<ul>
+<li>减少 JavaScript 脚本执行时间，减少JavaScript执行霸占主线程影响渲染的时间。</li>
+</ul>
+<p>1.将函数分解为多个任务，每个任务都不要太久；<br>2.采用Web Workers创建多个线程。Web Workers中没有DOM、CSSOM 环境，可以把一些和 DOM 操作无关且耗时的任务放到 Web Workers 中去执行。</p>
+<ul>
+<li>避免强制同步布局<br>尽量不要在修改 DOM 结构时再去查询一些相关值。</li>
+<li>合理利用 CSS 合成动画<br>合成动画是直接在合成线程上执行的，不会占用主线程，且执行高效。</li>
+<li>避免频繁的垃圾回收<br>垃圾回收操作会占用主线程，尽量避免产生那些临时垃圾数据。</li>
+</ul>
+<h2 id="其他措施"><a href="#其他措施" class="headerlink" title="其他措施"></a>其他措施</h2><p>::开发阶段::</p>
+<ul>
+<li>用分析工具，例如webpack-bundle-analyzer，分析构建文件的组成；减少第三方库大小；</li>
+<li>例如React中，减少render函数触发。</li>
+</ul>
+<p>1.减少setState的使用，适当用私有属性代替state；<br>2.适当做组件拆分，减少组件渲染的节点;<br>3.shouldComponentUpdate生命周期中，深度比较props和state(耗性能)，如果两个都没有变化则不做更新；使用Immutable.js来替代state和props数据结构，低成本做比较，减少组件树中的渲染节点</p>
+<p>::构建阶段::</p>
+<ul>
+<li>图片压缩处理</li>
+<li>小图片转换为base64编码；</li>
+<li>合理地切分代码，按需加载模块；</li>
+</ul>
+<p>::部署阶段::</p>
+<ul>
+<li>nginx开启缓存，开启gzip功能；</li>
+<li>图片使用cdn</li>
+</ul>
+
+				
+			
+		</div>
+	</div>
+</div>
+
+
+</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="footer-container">
+			<div class="wrap">
+				<div class="personallogo">
+					<svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							 width="227.792px" height="368.981px" viewBox="0 0 227.792 368.981" style="enable-background:new 0 0 227.792 368.981;"
+							 xml:space="preserve">
+						<style type="text/css">
+							.st0{fill:#FFF100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st1{fill:#F39A00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st2{fill:#FABF00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st3{fill:#FFD900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st4{fill:#F18900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st5{fill:#F5A200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st6{fill:#FFEA00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st7{fill:#FCC800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st8{fill:#F8B100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st9{fill:#FDD100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st10{fill:#FFE200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st11{fill:#ED6F00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st12{fill:#F08000;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st13{fill:#F29100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st14{fill:#F6A900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st15{fill:#EE7800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							#logo g polygon {
+								transition: all .8s;
+							}
+							#logo:hover g polygon:nth-of-type(4n+1){
+								-webkit-transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+2){
+								-webkit-transform: translate(12%, 56%) scale(.5)  translateZ(0);
+								transform: translate(12%, 56%) scale(.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+3){
+								-webkit-transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n){
+								-webkit-transform: translate(-33%, 60%) scale(1) translateZ(0);
+								transform: translate(33%, 60%) scale(1) translateZ(0);
+								opacity: .3;
+							}				
+						</style>
+						<g>
+							<polygon class="st2" points="66.232,65.812 40.521,80.656 14.81,95.5 14.81,65.812 14.81,36.125 40.521,50.968 	"/>
+							<polygon class="st3" points="66.231,65.812 91.943,50.968 117.654,36.125 117.654,65.812 117.654,95.5 91.943,80.656 	"/>
+							<polygon class="st8" points="14.81,95.557 40.521,80.713 66.232,65.869 66.232,95.557 66.232,125.245 40.521,110.401 	"/>
+							<polygon class="st14" points="66.232,125.245 40.521,140.089 14.81,154.933 14.81,125.245 14.81,95.557 40.521,110.401 	"/>
+							<polygon class="st5" points="14.81,154.989 40.521,140.146 66.232,125.302 66.232,154.989 66.232,184.677 40.521,169.833 	"/>
+							<polygon class="st1" points="66.232,184.621 40.521,199.463 14.81,214.308 14.81,184.621 14.81,154.933 40.521,169.776 	"/>
+							<polygon class="st7" points="66.232,184.62 91.943,169.776 117.654,154.933 117.654,184.62 117.654,214.308 91.943,199.463 	"/>
+							<polygon class="st13" points="14.81,214.366 40.521,199.521 66.232,184.677 66.232,214.366 66.232,244.053 40.521,229.209 	"/>
+							<polygon class="st8" points="117.654,214.366 91.943,229.209 66.232,244.053 66.232,214.366 66.232,184.677 91.943,199.521 	"/>
+							<polygon class="st10" points="169.076,65.812 143.365,80.656 117.654,95.5 117.654,65.812 117.654,36.125 143.365,50.968 	"/>
+							<polygon class="st9" points="117.654,36.125 91.943,50.969 66.232,65.812 66.232,36.125 66.232,6.437 91.943,21.281 	"/>
+							<polygon class="st6" points="117.654,95.556 143.364,80.712 169.076,65.869 169.076,95.556 169.076,125.245 143.364,110.401 	"/>
+							<polygon class="st0" points="220.498,95.558 194.789,110.402 169.078,125.245 169.078,95.558 169.076,65.87 194.789,80.713 	"/>
+							<polygon class="st4" points="66.232,244.053 40.521,258.897 14.81,273.741 14.81,244.053 14.81,214.366 40.521,229.209 	"/>
+							<polygon class="st12" points="14.81,273.797 40.521,258.954 66.232,244.11 66.232,273.797 66.232,303.485 40.521,288.642 	"/>
+							<polygon class="st7" points="14.81,36.124 40.52,21.279 66.231,6.437 66.231,36.124 66.232,65.812 40.52,50.968 	"/>
+							<polygon class="st3" points="169.076,184.678 143.367,199.522 117.656,214.366 117.656,184.678 117.654,154.99 143.367,169.833 	
+								"/>
+							<polygon class="st15" points="66.232,303.486 40.521,318.331 14.81,333.172 14.81,303.486 14.81,273.797 40.521,288.642 	"/>
+							<polygon class="st11" points="14.81,333.172 40.521,318.331 66.232,303.486 66.232,333.172 66.232,362.862 40.521,348.018 	"/>
+						</g>
+					</svg>
+				</div>
+				<div class="somelink">
+					<div class="label">
+						我喜欢拍照
+						<h3><a href="/photos">照片</a></h3>
+					</div>
+					<div class="label">
+						所有文章
+						<h3><a href="/archives">归档</a></h3>
+					</div>
+					<div class="label">
+						想说些什么？
+						<h3><a href="/about">留言</a></h3>
+					</div>
+					<div class="label">
+						我在找实习找实习
+						<h3><a href="#">简历</a></h3>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div id="widget">
+			<div id="toTop">
+				<i class="indicator iconfont">&#xe664;</i>
+			</div>
+		</div>
+	</div>
+	
+<script src="/js/index.js"></script>
+
+</body>
+</html>

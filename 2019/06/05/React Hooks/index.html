@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>
+	
+	
+		React Hooks | 
+	Hexo
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+<link rel="stylesheet" href="/css/index.css">
+
+	
+<link rel="stylesheet" href="/css/nprogress.css">
+
+	
+<script src="/js/jquery-2.2.4.min.js"></script>
+
+	
+<script src="/js/lazyload.js"></script>
+
+	
+<script src="/js/nprogress.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+	<div id="container">
+		<div id="header" >
+			<div class="headerbg">
+				<div class="header-title">
+					<h1><a href="/">Hexo</a></h1>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div class="content">
+			<div class="wrap articlepage">
+<div class="breadcrumbs">
+	<h6>
+		<a href="/">Home</a>
+		<span class="partition">|</span>
+		<a href="/archives/2019">
+			2019
+		</a>
+		<span class="partition">|</span>
+		<span>React Hooks</span>
+	</h6>
+</div>
+<div class="typo article">
+	<div class="article-meta">
+	
+	<h1 class="article-title article-title-frompost" itemprop="name">
+		React Hooks
+	</h1>
+
+	<time class="article-date" datetime="2019-06-05T07:14:02.040Z" itemprop="datePublished">
+	2019-06-05
+	</time>
+	
+</div>
+	<div class="article-body">
+		<div class="article-content">
+			 
+				<time class="article-date-true" datetime="2019-06-05T07:14:02.040Z" itemprop="datePublished">
+					2019-06-05
+				</time>
+				<h1 id="React-Hooks"><a href="#React-Hooks" class="headerlink" title="React Hooks"></a>React Hooks</h1><p>#积累/react/react-hooks#</p>
+<h3 id="无状态组件"><a href="#无状态组件" class="headerlink" title="无状态组件"></a>无状态组件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const Header &#x3D; props &#x3D;&gt; &lt;p&gt;...&lt;&#x2F;p&gt;</span><br><span class="line">const SomeButton &#x3D; props &#x3D;&gt; &#123;</span><br><span class="line">  const onClick &#x3D; e &#x3D;&gt; (...)</span><br><span class="line">  return &lt;button onClick&#x3D;&#123;onClick&#125;&gt;Click me!&lt;&#x2F;button&gt;</span><br><span class="line">&#125;</span><br><span class="line">const Username &#x3D; (props, context) &#x3D;&gt; &lt;p&gt;Username is &#123;context.name&#125;&lt;&#x2F;p&gt;;</span><br></pre></td></tr></table></figure>
+<p>当写着无状态组件，发现需要使用state，需要使用生命周期的时候，必须转换为class组件。现在有了另外一个选择，React Hooks。<br>React Hooks提供了一种方法，在原来的无状态组件中使用state、生命周期等React特性。</p>
+<p>-无状态组件- =&gt; 函数组件</p>
+<h3 id="React-Hooks的简单例子"><a href="#React-Hooks的简单例子" class="headerlink" title="React Hooks的简单例子"></a>React Hooks的简单例子</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function UserGreetings(props) &#123;</span><br><span class="line">  const [loading, setLoading] &#x3D; useState(true);</span><br><span class="line">  const [user, setUser] &#x3D; useState(null);</span><br><span class="line">  const [error, setError] &#x3D; useState(null);</span><br><span class="line"></span><br><span class="line">  useEffect(() &#x3D;&gt; &#123;</span><br><span class="line">	fetch(&#96;https:&#x2F;&#x2F;myApi.io&#x2F;users&#x2F;$&#123;props.userId&#125;&#96;)</span><br><span class="line">		.then(response &#x3D;&gt; response.json())</span><br><span class="line">      .then(user &#x3D;&gt; &#123;</span><br><span class="line">        setLoading(false);</span><br><span class="line">        setUser(user);</span><br><span class="line">      &#125;)</span><br><span class="line">      .catch(error &#x3D;&gt; &#123;</span><br><span class="line">        setLoading(false);</span><br><span class="line">        setError(error);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;, [props.userId]);</span><br><span class="line"></span><br><span class="line">  if (loading) &#123;</span><br><span class="line">    return &lt;p&gt;Loading...&lt;&#x2F;p&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">  if (error) &#123;</span><br><span class="line">    return &lt;p&gt;Error :(&lt;&#x2F;p&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">  return &lt;p&gt;Greetings, &#123;user.name&#125;!&lt;&#x2F;p&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;使用</span><br><span class="line">class App extends Component &#123;</span><br><span class="line">	constructor(props)&#123;</span><br><span class="line">		super(props);</span><br><span class="line">	&#125;</span><br><span class="line">	render()&#123;</span><br><span class="line">		return &lt;div&gt;</span><br><span class="line">			&lt;UserGreetings &#x2F;&gt;</span><br><span class="line">		&lt;div&gt;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>特性：</p>
+<ol>
+<li>UserGreetings组件不仅会因为props的改变而重新渲染，通过useState创建的状态的改变也会导致组件重新渲染。</li>
+<li>useState的作用，挂载时创建，重新渲染都是读取。</li>
+<li>UserGreetings组件渲染到屏幕之后会执行useEffect中的函数；useEffect可以返回一个清除函数，它会在组件重新渲染前执行。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">useEffect(</span><br><span class="line">  () &#x3D;&gt; &#123;</span><br><span class="line">    const subscription &#x3D; props.source.subscribe();</span><br><span class="line">    return () &#x3D;&gt; &#123;</span><br><span class="line">      subscription.unsubscribe();</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  [props.source],</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+默认每次渲染，effect都会被清除并重新创建；<br>可以传入一个依赖数组，作为第二参数，只有当数组中的状态变化，才会重新创建effect；<br>传入一个空数组作为第二参数，则只会在组件挂载和卸载时执行。</li>
+</ol>
+<h3 id="自定义Hook"><a href="#自定义Hook" class="headerlink" title="自定义Hook"></a>自定义Hook</h3><ul>
+<li>React 内置的Hook API：<br><img src="React%20Hooks/408876E0-042B-4C19-A62B-9630FE14EAD5.png" alt=""></li>
+<li>简单例子：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function useFriendStatus(friendID) &#123;</span><br><span class="line">  const [isOnline, setIsOnline] &#x3D; useState(null);</span><br><span class="line"></span><br><span class="line">  useEffect(() &#x3D;&gt; &#123;</span><br><span class="line">    function handleStatusChange(status) &#123;</span><br><span class="line">      setIsOnline(status.isOnline);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange);</span><br><span class="line">    return () &#x3D;&gt; &#123;</span><br><span class="line">      ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  return isOnline;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+使用自定义Hook<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function FriendStatus(props) &#123;</span><br><span class="line">  const isOnline &#x3D; useFriendStatus(props.friend.id);</span><br><span class="line"></span><br><span class="line">  if (isOnline &#x3D;&#x3D;&#x3D; null) &#123;</span><br><span class="line">    return &#39;Loading...&#39;;</span><br><span class="line">  &#125;</span><br><span class="line">  return isOnline ? &#39;Online&#39; : &#39;Offline&#39;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+特性：</li>
+</ul>
+<ol>
+<li>自定义Hook的命名以“use”开头。</li>
+<li>useFriendStatus返回的isOnline，它的改变，会引起FriendStatus的重新渲染。可以理解为通过自定义Hook间接调用了useState、useEffect。</li>
+<li>自定义Hook只是个函数，可以用来计算state、执行effect，等任何内置Hook行为逻辑的分隔。</li>
+</ol>
+<h3 id="Hook-VS-Class"><a href="#Hook-VS-Class" class="headerlink" title="Hook VS Class"></a>Hook VS Class</h3><p>React Hooks和class组件可以实现几乎一样的功能，其意义何在？<br><img src="React%20Hooks/8AF97A68-4994-4F98-A555-91DFAC7A8FE5.png" alt=""></p>
+<h4 id="Why-Hooks"><a href="#Why-Hooks" class="headerlink" title="Why Hooks?"></a>Why Hooks?</h4><blockquote>
+<p>However, we often can’t break complex components down any further because the logic is stateful and can’t be extracted to a function or another component.<br>我们经常不能将复杂组件分解地足够小，因为逻辑是有状态的；状态不能被提取到单独的函数或组件中，状态只能按层级传递。当我们尝试用独立组件的方式解决这些问题，我们总是止步于：<br>1.巨大的组件很难重构和测试；<br>2.两个不同组件间重复的逻辑和生命周期方法；<br>3.像render props和高阶组件的模式太复杂。<br>我们认为Hooks是解决这些问题最好的办法。Hooks让我们把逻辑的组织从组件转移到可重用的独立单元。</p>
+</blockquote>
+<h4 id="What-Are-Hooks-Exactly"><a href="#What-Are-Hooks-Exactly" class="headerlink" title="What Are Hooks,Exactly?"></a>What Are Hooks,Exactly?</h4><blockquote>
+<p>Components are more powerful, but they have to render some UI. This makes them inconvenient for sharing non-visual logic.<br>This is how we end up with complex patterns like render props and higher-order components.<strong>Wouldn’t React be simpler if there was justonecommon way to reuse code instead of so many?</strong><br>组件更加强大，但它必须渲染一些UI。这使得它复用非视觉逻辑不方便。<br>这就是为什么我们使用像render props和高阶组件这样的复杂模式。<br>React是否能只用一种通用的方法去复用代码，代替render props和高阶组件这种复杂的模式？<br>Functions seem to be a perfect mechanism for code reuse. Moving logic between functions takes the least amount of effort. However, functions can’t have local React state inside them. You can’t extract behavior like “watch window size and update the state” or “animate a value over time” from a class component without restructuring your code or introducing an abstraction like Observables. Both approaches hurt the simplicity that we like about React.<br>函数似乎是代码复用最好的机制。花最少的力气就可以在函数间移动逻辑。但是在函数内部没有本地React状态。在不重构你的代码或引入一个Observables抽象的情况下，你不能抽取像“监听窗口大小，更新状态”或“给一个值随时间产生动画”的行为。两种方式都有损于React的简单性。<br>Hooks solve exactly that problem. Hooks let you use React features (like state) from a function — by doing a single function call. React provides a few built-in Hooks exposing the “building blocks” of React: state, lifecycle, and context.<br>Hooks准确地解决了这类问题。通过简单的函数调用，Hooks让你能在函数中使用React特性。React在代码块中提供一些内置Hooks，暴露React的“building blocks”，像state, lifecycle, and context。</p>
+</blockquote>
+<h3 id="React-Hooks实现组件生命周期"><a href="#React-Hooks实现组件生命周期" class="headerlink" title="React Hooks实现组件生命周期"></a>React Hooks实现组件生命周期</h3><p><a href="bear://x-callback-url/open-note?id=C86CF744-0229-42D3-9F25-926F6DC273D5-852-000240B6491C2752">React Hooks实现组件生命周期</a></p>
+<h3 id="React-Hooks重要的两条原则"><a href="#React-Hooks重要的两条原则" class="headerlink" title="React Hooks重要的两条原则"></a>React Hooks重要的两条原则</h3><p>::只在 React 函数中调用 Hook::<br>不要在普通的 JavaScript 函数中调用 Hook，Hook提供的功能需要在组件的环境下才有意义。<br>::只在最顶层使用 Hook::<br>不要在循环，条件或嵌套函数中调用 Hook<br><a href="bear://x-callback-url/open-note?id=7EBE273A-0F0F-424B-9CA1-7806501BF106-852-0001C9DDAB83B68A">为什么顺序对React Hook很重要</a></p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
+<li>不能在class中调用Hooks，只能在class中引入函数组件。<blockquote>
+<h2 id="Invariant-Violation"><a href="#Invariant-Violation" class="headerlink" title="Invariant Violation"></a>Invariant Violation</h2><p>Hooks can only be called inside the body of a function component.  </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class App extends Component &#123;</span><br><span class="line">  constructor(props) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">  &#125;</span><br><span class="line">  render() &#123;</span><br><span class="line">    const element &#x3D; hovered &#x3D;&gt; &lt;div&gt;Hover me! &#123;hovered &amp;&amp; &quot;Thanks!&quot;&#125;&lt;&#x2F;div&gt;;</span><br><span class="line">    const [hoverable, hovered] &#x3D; useHover(element);</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &#123;hoverable&#125;</span><br><span class="line">        &lt;div&gt;&#123;hovered ? &quot;HOVERED&quot; : &quot;&quot;&#125;&lt;&#x2F;div&gt;</span><br><span class="line">      &lt;&#x2F;div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">const Demo &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">  const element &#x3D; hovered &#x3D;&gt; &lt;div&gt;Hover me! &#123;hovered &amp;&amp; &quot;Thanks!&quot;&#125;&lt;&#x2F;div&gt;;</span><br><span class="line">  const [hoverable, hovered] &#x3D; useHover(element);</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;hoverable&#125;</span><br><span class="line">      &lt;div&gt;&#123;hovered ? &quot;HOVERED&quot; : &quot;&quot;&#125;&lt;&#x2F;div&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line">class App extends Component &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return &lt;Demo &#x2F;&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><a href="https://github.com/acdlite/recompose" target="_blank" rel="noopener">https://github.com/acdlite/recompose</a><br><img src="React%20Hooks/4449CE63-AA27-4EDA-A4B1-A0B28A5576A1.png" alt=""></li>
+<li>Spread Love, NotHype<br>When you talk to other people who aren’t as excited as you are, please be courteous. If you see a misconception, you can share extra information if the other person is open to it. But any change is scary, and as a community we should try our best to help people instead of alienating them. And if I (or anyone else on the React team) fail to follow this advice, please call us out!</li>
+<li>React Hooks一些自定义Hook，usehooks.com</li>
+</ul>
+
+				
+			
+		</div>
+	</div>
+</div>
+
+
+</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="footer-container">
+			<div class="wrap">
+				<div class="personallogo">
+					<svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							 width="227.792px" height="368.981px" viewBox="0 0 227.792 368.981" style="enable-background:new 0 0 227.792 368.981;"
+							 xml:space="preserve">
+						<style type="text/css">
+							.st0{fill:#FFF100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st1{fill:#F39A00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st2{fill:#FABF00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st3{fill:#FFD900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st4{fill:#F18900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st5{fill:#F5A200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st6{fill:#FFEA00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st7{fill:#FCC800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st8{fill:#F8B100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st9{fill:#FDD100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st10{fill:#FFE200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st11{fill:#ED6F00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st12{fill:#F08000;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st13{fill:#F29100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st14{fill:#F6A900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st15{fill:#EE7800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							#logo g polygon {
+								transition: all .8s;
+							}
+							#logo:hover g polygon:nth-of-type(4n+1){
+								-webkit-transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+2){
+								-webkit-transform: translate(12%, 56%) scale(.5)  translateZ(0);
+								transform: translate(12%, 56%) scale(.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+3){
+								-webkit-transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n){
+								-webkit-transform: translate(-33%, 60%) scale(1) translateZ(0);
+								transform: translate(33%, 60%) scale(1) translateZ(0);
+								opacity: .3;
+							}				
+						</style>
+						<g>
+							<polygon class="st2" points="66.232,65.812 40.521,80.656 14.81,95.5 14.81,65.812 14.81,36.125 40.521,50.968 	"/>
+							<polygon class="st3" points="66.231,65.812 91.943,50.968 117.654,36.125 117.654,65.812 117.654,95.5 91.943,80.656 	"/>
+							<polygon class="st8" points="14.81,95.557 40.521,80.713 66.232,65.869 66.232,95.557 66.232,125.245 40.521,110.401 	"/>
+							<polygon class="st14" points="66.232,125.245 40.521,140.089 14.81,154.933 14.81,125.245 14.81,95.557 40.521,110.401 	"/>
+							<polygon class="st5" points="14.81,154.989 40.521,140.146 66.232,125.302 66.232,154.989 66.232,184.677 40.521,169.833 	"/>
+							<polygon class="st1" points="66.232,184.621 40.521,199.463 14.81,214.308 14.81,184.621 14.81,154.933 40.521,169.776 	"/>
+							<polygon class="st7" points="66.232,184.62 91.943,169.776 117.654,154.933 117.654,184.62 117.654,214.308 91.943,199.463 	"/>
+							<polygon class="st13" points="14.81,214.366 40.521,199.521 66.232,184.677 66.232,214.366 66.232,244.053 40.521,229.209 	"/>
+							<polygon class="st8" points="117.654,214.366 91.943,229.209 66.232,244.053 66.232,214.366 66.232,184.677 91.943,199.521 	"/>
+							<polygon class="st10" points="169.076,65.812 143.365,80.656 117.654,95.5 117.654,65.812 117.654,36.125 143.365,50.968 	"/>
+							<polygon class="st9" points="117.654,36.125 91.943,50.969 66.232,65.812 66.232,36.125 66.232,6.437 91.943,21.281 	"/>
+							<polygon class="st6" points="117.654,95.556 143.364,80.712 169.076,65.869 169.076,95.556 169.076,125.245 143.364,110.401 	"/>
+							<polygon class="st0" points="220.498,95.558 194.789,110.402 169.078,125.245 169.078,95.558 169.076,65.87 194.789,80.713 	"/>
+							<polygon class="st4" points="66.232,244.053 40.521,258.897 14.81,273.741 14.81,244.053 14.81,214.366 40.521,229.209 	"/>
+							<polygon class="st12" points="14.81,273.797 40.521,258.954 66.232,244.11 66.232,273.797 66.232,303.485 40.521,288.642 	"/>
+							<polygon class="st7" points="14.81,36.124 40.52,21.279 66.231,6.437 66.231,36.124 66.232,65.812 40.52,50.968 	"/>
+							<polygon class="st3" points="169.076,184.678 143.367,199.522 117.656,214.366 117.656,184.678 117.654,154.99 143.367,169.833 	
+								"/>
+							<polygon class="st15" points="66.232,303.486 40.521,318.331 14.81,333.172 14.81,303.486 14.81,273.797 40.521,288.642 	"/>
+							<polygon class="st11" points="14.81,333.172 40.521,318.331 66.232,303.486 66.232,333.172 66.232,362.862 40.521,348.018 	"/>
+						</g>
+					</svg>
+				</div>
+				<div class="somelink">
+					<div class="label">
+						我喜欢拍照
+						<h3><a href="/photos">照片</a></h3>
+					</div>
+					<div class="label">
+						所有文章
+						<h3><a href="/archives">归档</a></h3>
+					</div>
+					<div class="label">
+						想说些什么？
+						<h3><a href="/about">留言</a></h3>
+					</div>
+					<div class="label">
+						我在找实习找实习
+						<h3><a href="#">简历</a></h3>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div id="widget">
+			<div id="toTop">
+				<i class="indicator iconfont">&#xe664;</i>
+			</div>
+		</div>
+	</div>
+	
+<script src="/js/index.js"></script>
+
+</body>
+</html>

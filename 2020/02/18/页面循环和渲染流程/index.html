@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<title>
 	
+	
+		页面循环和渲染流程 | 
 	Hexo
 	</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -37,130 +39,23 @@
 		
 		<div id="main">
 			<div class="content">
-			<div class="wrap archivespage">
-
-	
-	
-	
-		
-		
-			
-			
-			<div class="archives-byyear">
-				<div class="archives-year">
-					<h1>
-					<a href="/archives/2020"> 2020 </a>
-					</h1>
-				</div>
-				<div class="archives-list">
-		
-		<div class="archives-item">
+			<div class="wrap articlepage">
+<div class="breadcrumbs">
+	<h6>
+		<a href="/">Home</a>
+		<span class="partition">|</span>
+		<a href="/archives/2020">
+			2020
+		</a>
+		<span class="partition">|</span>
+		<span>页面循环和渲染流程</span>
+	</h6>
+</div>
+<div class="typo article">
 	<div class="article-meta">
 	
-	<h1 class="article-title">
-		<a href="/2020/03/25/hello-world/" itemprop="url">
-			Hello World
-		</a>
-	</h1>
-
-	<time class="article-date" datetime="2020-03-25T14:35:03.864Z" itemprop="datePublished">
-	2020-03-25
-	</time>
-	
-</div>
-	<div class="color left"></div>
-    <div class="color right"></div>
-</div>
-	
-		
-		
-		<div class="archives-item">
-	<div class="article-meta">
-	
-	<h1 class="article-title">
-		<a href="/2020/03/15/HTTP2/" itemprop="url">
-			HTTP2
-		</a>
-	</h1>
-
-	<time class="article-date" datetime="2020-03-15T08:12:02.405Z" itemprop="datePublished">
-	2020-03-15
-	</time>
-	
-</div>
-	<div class="color left"></div>
-    <div class="color right"></div>
-</div>
-	
-		
-		
-		<div class="archives-item">
-	<div class="article-meta">
-	
-	<h1 class="article-title">
-		<a href="/2020/03/11/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" itemprop="url">
-			前端性能优化
-		</a>
-	</h1>
-
-	<time class="article-date" datetime="2020-03-11T06:44:01.494Z" itemprop="datePublished">
-	2020-03-11
-	</time>
-	
-</div>
-	<div class="color left"></div>
-    <div class="color right"></div>
-</div>
-	
-		
-		
-		<div class="archives-item">
-	<div class="article-meta">
-	
-	<h1 class="article-title">
-		<a href="/2020/03/11/H5%E4%B8%8E%E5%8E%9F%E7%94%9F%E4%BA%A4%E4%BA%92%E5%8E%9F%E7%90%86/" itemprop="url">
-			H5与原生交互原理
-		</a>
-	</h1>
-
-	<time class="article-date" datetime="2020-03-10T16:32:22.261Z" itemprop="datePublished">
-	2020-03-11
-	</time>
-	
-</div>
-	<div class="color left"></div>
-    <div class="color right"></div>
-</div>
-	
-		
-		
-		<div class="archives-item">
-	<div class="article-meta">
-	
-	<h1 class="article-title">
-		<a href="/2020/02/22/JavaScript%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86/" itemprop="url">
-			JavaScript执行原理
-		</a>
-	</h1>
-
-	<time class="article-date" datetime="2020-02-22T12:35:52.290Z" itemprop="datePublished">
-	2020-02-22
-	</time>
-	
-</div>
-	<div class="color left"></div>
-    <div class="color right"></div>
-</div>
-	
-		
-		
-		<div class="archives-item">
-	<div class="article-meta">
-	
-	<h1 class="article-title">
-		<a href="/2020/02/18/%E9%A1%B5%E9%9D%A2%E5%BE%AA%E7%8E%AF%E5%92%8C%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B/" itemprop="url">
-			页面循环和渲染流程
-		</a>
+	<h1 class="article-title article-title-frompost" itemprop="name">
+		页面循环和渲染流程
 	</h1>
 
 	<time class="article-date" datetime="2020-02-18T11:00:23.088Z" itemprop="datePublished">
@@ -168,58 +63,37 @@
 	</time>
 	
 </div>
-	<div class="color left"></div>
-    <div class="color right"></div>
-</div>
-	
-		
-		
-		<div class="archives-item">
-	<div class="article-meta">
-	
-	<h1 class="article-title">
-		<a href="/2020/02/12/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E6%9E%B6%E6%9E%84/" itemprop="url">
-			Chrome浏览器架构
-		</a>
-	</h1>
+	<div class="article-body">
+		<div class="article-content">
+			 
+				<time class="article-date-true" datetime="2020-02-18T11:00:23.088Z" itemprop="datePublished">
+					2020-02-18
+				</time>
+				<h1 id="页面循环和渲染流程"><a href="#页面循环和渲染流程" class="headerlink" title="页面循环和渲染流程"></a>页面循环和渲染流程</h1><p>#积累/浏览器原理</p>
+<p>先来看看页面渲染完成之后的情况：<br>渲染进程的<strong>主线程</strong>一直在循环监听，如果消息队列中存在任务，则按队列顺序依次执行。<br>消息队列是一种队列数据结构，用来存放要执行的任务，任务包括：HTML解析、CSS解析、JavaScript 执行、样式计算、布局计算、CSS 动画；输入事件（鼠标滚动、点击、移动）、微任务、文件读写、WebSocket、JavaScript 定时器等等。<br>渲染进程还有<strong>IO线程</strong>，接收其他进程传来的消息，并push到消息队列中。包括：网络进程的资源加载完成、浏览器进程的鼠标点击事件等。</p>
+<h3 id="宏任务和微任务"><a href="#宏任务和微任务" class="headerlink" title="宏任务和微任务"></a>宏任务和微任务</h3><p>渲染进程是单线程执行的，可能单个任务执行时间过长，不能满足实时性的需求，如监听 DOM 变化并及时地做出响应。因此出现了微任务。<br>消息队列中的任务是宏任务，每个宏任务都关联了一个微任务队列，微任务队列会在宏任务结束之前一直循环执行。在微任务执行过程中产生的新的微任务，也会在当前宏任务中被执行完成。<br>产生微任务的情况：<br>使用 MutationObserver 监控某个 DOM 节点，节点的任务变更都会因此产生微任务；<br>使用Promise，调用 Promise.resolve() 或者 Promise.reject() 的时候，也会产生微任务。</p>
+<h3 id="渲染流程"><a href="#渲染流程" class="headerlink" title="渲染流程"></a>渲染流程</h3><p>HTML、CSS和JavaScript文件是如何产生视觉页面的？<br><img src="%E9%A1%B5%E9%9D%A2%E5%BE%AA%E7%8E%AF%E5%92%8C%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B/2b08a85c63bee68c6fd95dabb648fd79.png" alt=""></p>
+<p>渲染流程包括的子阶段：构建 DOM 树、样式计算、布局阶段、分层、绘制、分块、光栅化和合成。</p>
+<ol>
+<li>构建DOM树/DOM<br>将HTML转换为浏览器能够理解的结构——<strong>DOM树</strong>（document）</li>
+<li>样式计算/Style<br>将CSS转换为浏览器能够理解的结构：<strong>styleSheets</strong>(document.styleSheets)；<br>转换样式表中的属性值，使其标准化，例如em转换为px，green转换为rgb；<br>计算出DOM树中每个节点的具体样式(继承和样式层叠)</li>
+<li>布局/Layout<br>构建布局树，包括DOM 树中可见元素；<br>计算DOM节点的布局信息，保持在<strong>布局树</strong>中。</li>
+<li>分层/Layer<br>渲染引擎需要为特定的节点生成专用的图层，并生成一棵对应的<strong>图层树</strong>。<br>满足什么条件会创建新的图层？</li>
+<li>拥有层叠上下文属性的元素会被提升为单独的一层，包括position、z-index、filter、opacity等</li>
+<li>需要剪裁（clip）的地方也会被创建为图层，例如overflow的内容元素</li>
+<li>绘制/Paint<br>渲染引擎会对图层树中的每个图层生成<strong>绘制列表</strong>，并提交给合成线程</li>
+<li>栅格化操作/Raster<br>合成线程将图层分成<strong>图块</strong>，并在光栅化线程池中将<strong>图块转换成位图</strong>。</li>
+<li>合成和显示<br>合成线程发送绘制图块命令 DrawQuad 给浏览器进程；<br>浏览器进程根据 DrawQuad 消息生成页面，并显示到显示器上。</li>
+</ol>
 
-	<time class="article-date" datetime="2020-02-12T07:20:23.918Z" itemprop="datePublished">
-	2020-02-12
-	</time>
-	
+				
+			
+		</div>
+	</div>
 </div>
-	<div class="color left"></div>
-    <div class="color right"></div>
-</div>
-	
-		
-		
-		<div class="archives-item">
-	<div class="article-meta">
-	
-	<h1 class="article-title">
-		<a href="/2020/02/10/%E6%B5%8F%E8%A7%88%E5%99%A8%E9%A1%B5%E9%9D%A2%E5%AE%89%E5%85%A8/" itemprop="url">
-			浏览器页面安全
-		</a>
-	</h1>
-
-	<time class="article-date" datetime="2020-02-10T09:06:57.223Z" itemprop="datePublished">
-	2020-02-10
-	</time>
-	
-</div>
-	<div class="color left"></div>
-    <div class="color right"></div>
-</div>
-	
-	
-			</div></div>
-	
-	
 
 
 </div>
-
 			</div>
 		</div>
 		<div id="footer">

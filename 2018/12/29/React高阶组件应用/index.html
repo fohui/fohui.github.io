@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>
+	
+	
+		React高阶组件应用 | 
+	Hexo
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+<link rel="stylesheet" href="/css/index.css">
+
+	
+<link rel="stylesheet" href="/css/nprogress.css">
+
+	
+<script src="/js/jquery-2.2.4.min.js"></script>
+
+	
+<script src="/js/lazyload.js"></script>
+
+	
+<script src="/js/nprogress.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+	<div id="container">
+		<div id="header" >
+			<div class="headerbg">
+				<div class="header-title">
+					<h1><a href="/">Hexo</a></h1>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div class="content">
+			<div class="wrap articlepage">
+<div class="breadcrumbs">
+	<h6>
+		<a href="/">Home</a>
+		<span class="partition">|</span>
+		<a href="/archives/2018">
+			2018
+		</a>
+		<span class="partition">|</span>
+		<span>React高阶组件应用</span>
+	</h6>
+</div>
+<div class="typo article">
+	<div class="article-meta">
+	
+	<h1 class="article-title article-title-frompost" itemprop="name">
+		React高阶组件应用
+	</h1>
+
+	<time class="article-date" datetime="2018-12-29T08:19:02.054Z" itemprop="datePublished">
+	2018-12-29
+	</time>
+	
+</div>
+	<div class="article-body">
+		<div class="article-content">
+			 
+				<time class="article-date-true" datetime="2018-12-29T08:19:02.054Z" itemprop="datePublished">
+					2018-12-29
+				</time>
+				<h1 id="高阶组件应用"><a href="#高阶组件应用" class="headerlink" title="高阶组件应用"></a>高阶组件应用</h1><p>#积累/react</p>
+<h3 id="抽取组件内部状态"><a href="#抽取组件内部状态" class="headerlink" title="抽取组件内部状态"></a>抽取组件内部状态</h3><ul>
+<li>弹窗组件<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">export function bindPopupTrigger(Children)&#123;</span><br><span class="line">	return class PopupTrigger extends Component &#123;</span><br><span class="line">		constructor(props)&#123;</span><br><span class="line">            super(props)</span><br><span class="line">            this.state &#x3D; &#123;</span><br><span class="line">                popData: &#123;</span><br><span class="line">					isOpen: false,</span><br><span class="line">					msg: &#39;hello&#39;,</span><br><span class="line">					jump: &#39;&#39;,</span><br><span class="line">					btnTxt: &#39;确定&#39;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			this.changePopData &#x3D; this.changePopData.bind(this)</span><br><span class="line">        	this.popClose &#x3D; this.popClose.bind(this)</span><br><span class="line">		&#125;</span><br><span class="line">		popClose()&#123;</span><br><span class="line">			const &#123;popData&#125; &#x3D; this.state;</span><br><span class="line">			this.setState(&#123;</span><br><span class="line">				popData:&#123;</span><br><span class="line">					...popData,</span><br><span class="line">					isOpen: false</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;)</span><br><span class="line">		&#125;</span><br><span class="line">		changePopData(&#123;msg,jump,btnTxt&#125;)&#123;</span><br><span class="line">			console.log(msg,jump,btnTxt)</span><br><span class="line">			this.setState(&#123;</span><br><span class="line">				popData:&#123;</span><br><span class="line">					isOpen: true,</span><br><span class="line">					msg,</span><br><span class="line">					jump,</span><br><span class="line">					btnTxt,</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;)</span><br><span class="line">		&#125;</span><br><span class="line">		render()&#123;</span><br><span class="line">			const &#123;popData&#125; &#x3D; this.state;</span><br><span class="line">            return &lt;div&gt;</span><br><span class="line">				&lt;Children changePopData&#x3D;&#123;this.changePopData&#125;&#x2F;&gt;</span><br><span class="line">				&lt;PopUp &#123;...popData&#125; onClose&#x3D;&#123;this.popClose&#125;&#x2F;&gt;</span><br><span class="line">			&lt;&#x2F;div&gt;</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>抽取输入框state<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">const MyContainer &#x3D; WrappedComponent &#x3D;&gt;</span><br><span class="line">  class extends Component &#123;</span><br><span class="line">    constructor (props) &#123;</span><br><span class="line">      super (props);</span><br><span class="line">      this.state &#x3D; &#123;</span><br><span class="line">        name: &#39;&#39;,</span><br><span class="line">      &#125;;</span><br><span class="line">      this.onNameChange &#x3D; this.onNameChange.bind (this);</span><br><span class="line">    &#125;</span><br><span class="line">    onNameChange (event) &#123;</span><br><span class="line">      this.setState (&#123;</span><br><span class="line">        name: event.target.value,</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    render () &#123;</span><br><span class="line">      const newProps &#x3D; &#123;</span><br><span class="line">        name: &#123;</span><br><span class="line">          value: this.state.name,</span><br><span class="line">          onChange: this.onNameChange,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;;</span><br><span class="line">      return &lt;WrappedComponent &#123;...this.props&#125; &#123;...newProps&#125; &#x2F;&gt;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="接口数据的请求"><a href="#接口数据的请求" class="headerlink" title="接口数据的请求"></a>接口数据的请求</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">import ShopList from &#39;..&#x2F;components&#x2F;ShopList.jsx&#39;;</span><br><span class="line"></span><br><span class="line">function shopListWithFetching(fetchData, defaultProps) &#123;</span><br><span class="line">    return class extends React.Component &#123;</span><br><span class="line">        constructor(props) &#123;</span><br><span class="line">            super(props);</span><br><span class="line">            this.state &#x3D; &#123;</span><br><span class="line">                data: [],</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        componentWillMount() &#123;</span><br><span class="line">            fetchData().then((list) &#x3D;&gt; &#123;</span><br><span class="line">                this.setState(&#123;</span><br><span class="line">                    data: list,</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;, (error) &#x3D;&gt; &#123;</span><br><span class="line">                console.log(error); &#x2F;&#x2F; eslint-disable-line</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        render() &#123;</span><br><span class="line">            return &lt;ShopList data&#x3D;&#123;this.state.data&#125; &#123;...defaultProps&#125; &#123;...this.props&#125; &#x2F;&gt;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line">export default shopListWithFetching;</span><br></pre></td></tr></table></figure>
+
+<h3 id="登陆态判断"><a href="#登陆态判断" class="headerlink" title="登陆态判断"></a>登陆态判断</h3><p>登陆态的判断抽离到高阶组件<br>还可以搭配React生命周期、接口请求处理更复杂情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const withLogin &#x3D; (Component) &#x3D;&gt; &#123;</span><br><span class="line">  const NewComponent &#x3D; (props) &#x3D;&gt; &#123;</span><br><span class="line">    if (getUserId()) &#123;</span><br><span class="line">      return &lt;Component &#123;...props&#125; &#x2F;&gt;;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return null;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return NewComponent;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="鉴权"><a href="#鉴权" class="headerlink" title="鉴权"></a>鉴权</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">import React from &#39;react&#39;;</span><br><span class="line">import &#123; whiteListAuth &#125; from &#39;..&#x2F;lib&#x2F;utils&#39;;</span><br><span class="line"></span><br><span class="line">&#x2F;**</span><br><span class="line"> * 白名单权限校验</span><br><span class="line"> * @param WrappedComponent</span><br><span class="line"> * @returns &#123;AuthWrappedComponent&#125;</span><br><span class="line"> * @constructor</span><br><span class="line"> *&#x2F;</span><br><span class="line">function AuthWrapper(WrappedComponent) &#123;</span><br><span class="line">    class AuthWrappedComponent extends React.Component &#123;</span><br><span class="line">        constructor(props) &#123;</span><br><span class="line">            super(props);</span><br><span class="line">            this.state &#x3D; &#123;</span><br><span class="line">                permissionDenied: -1,</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        componentWillMount() &#123;</span><br><span class="line">            whiteListAuth().then(() &#x3D;&gt; &#123;</span><br><span class="line">                &#x2F;&#x2F; success</span><br><span class="line">                this.setState(&#123;</span><br><span class="line">                    permissionDenied: 0,</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;, (error) &#x3D;&gt; &#123;</span><br><span class="line">                this.setState(&#123;</span><br><span class="line">                    permissionDenied: 1,</span><br><span class="line">                &#125;);</span><br><span class="line">                console.log(error);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        render() &#123;</span><br><span class="line">            if (this.state.permissionDenied &#x3D;&#x3D;&#x3D; -1) &#123;</span><br><span class="line">                return null;</span><br><span class="line">            &#125;</span><br><span class="line">            if (this.state.permissionDenied) &#123;</span><br><span class="line">                return &lt;div&gt;功能即将上线，敬请期待~&lt;&#x2F;div&gt;;</span><br><span class="line">            &#125;</span><br><span class="line">            return &lt;WrappedComponent &#123;...this.props&#125; &#x2F;&gt;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return AuthWrappedComponent;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default AuthWrapper;</span><br></pre></td></tr></table></figure>
+
+<h3 id="日志及性能打点"><a href="#日志及性能打点" class="headerlink" title="日志及性能打点"></a>日志及性能打点</h3><p>组件包裹上PV、UV等统计功能。</p>
+
+				
+			
+		</div>
+	</div>
+</div>
+
+
+</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="footer-container">
+			<div class="wrap">
+				<div class="personallogo">
+					<svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							 width="227.792px" height="368.981px" viewBox="0 0 227.792 368.981" style="enable-background:new 0 0 227.792 368.981;"
+							 xml:space="preserve">
+						<style type="text/css">
+							.st0{fill:#FFF100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st1{fill:#F39A00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st2{fill:#FABF00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st3{fill:#FFD900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st4{fill:#F18900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st5{fill:#F5A200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st6{fill:#FFEA00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st7{fill:#FCC800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st8{fill:#F8B100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st9{fill:#FDD100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st10{fill:#FFE200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st11{fill:#ED6F00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st12{fill:#F08000;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st13{fill:#F29100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st14{fill:#F6A900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st15{fill:#EE7800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							#logo g polygon {
+								transition: all .8s;
+							}
+							#logo:hover g polygon:nth-of-type(4n+1){
+								-webkit-transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+2){
+								-webkit-transform: translate(12%, 56%) scale(.5)  translateZ(0);
+								transform: translate(12%, 56%) scale(.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+3){
+								-webkit-transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n){
+								-webkit-transform: translate(-33%, 60%) scale(1) translateZ(0);
+								transform: translate(33%, 60%) scale(1) translateZ(0);
+								opacity: .3;
+							}				
+						</style>
+						<g>
+							<polygon class="st2" points="66.232,65.812 40.521,80.656 14.81,95.5 14.81,65.812 14.81,36.125 40.521,50.968 	"/>
+							<polygon class="st3" points="66.231,65.812 91.943,50.968 117.654,36.125 117.654,65.812 117.654,95.5 91.943,80.656 	"/>
+							<polygon class="st8" points="14.81,95.557 40.521,80.713 66.232,65.869 66.232,95.557 66.232,125.245 40.521,110.401 	"/>
+							<polygon class="st14" points="66.232,125.245 40.521,140.089 14.81,154.933 14.81,125.245 14.81,95.557 40.521,110.401 	"/>
+							<polygon class="st5" points="14.81,154.989 40.521,140.146 66.232,125.302 66.232,154.989 66.232,184.677 40.521,169.833 	"/>
+							<polygon class="st1" points="66.232,184.621 40.521,199.463 14.81,214.308 14.81,184.621 14.81,154.933 40.521,169.776 	"/>
+							<polygon class="st7" points="66.232,184.62 91.943,169.776 117.654,154.933 117.654,184.62 117.654,214.308 91.943,199.463 	"/>
+							<polygon class="st13" points="14.81,214.366 40.521,199.521 66.232,184.677 66.232,214.366 66.232,244.053 40.521,229.209 	"/>
+							<polygon class="st8" points="117.654,214.366 91.943,229.209 66.232,244.053 66.232,214.366 66.232,184.677 91.943,199.521 	"/>
+							<polygon class="st10" points="169.076,65.812 143.365,80.656 117.654,95.5 117.654,65.812 117.654,36.125 143.365,50.968 	"/>
+							<polygon class="st9" points="117.654,36.125 91.943,50.969 66.232,65.812 66.232,36.125 66.232,6.437 91.943,21.281 	"/>
+							<polygon class="st6" points="117.654,95.556 143.364,80.712 169.076,65.869 169.076,95.556 169.076,125.245 143.364,110.401 	"/>
+							<polygon class="st0" points="220.498,95.558 194.789,110.402 169.078,125.245 169.078,95.558 169.076,65.87 194.789,80.713 	"/>
+							<polygon class="st4" points="66.232,244.053 40.521,258.897 14.81,273.741 14.81,244.053 14.81,214.366 40.521,229.209 	"/>
+							<polygon class="st12" points="14.81,273.797 40.521,258.954 66.232,244.11 66.232,273.797 66.232,303.485 40.521,288.642 	"/>
+							<polygon class="st7" points="14.81,36.124 40.52,21.279 66.231,6.437 66.231,36.124 66.232,65.812 40.52,50.968 	"/>
+							<polygon class="st3" points="169.076,184.678 143.367,199.522 117.656,214.366 117.656,184.678 117.654,154.99 143.367,169.833 	
+								"/>
+							<polygon class="st15" points="66.232,303.486 40.521,318.331 14.81,333.172 14.81,303.486 14.81,273.797 40.521,288.642 	"/>
+							<polygon class="st11" points="14.81,333.172 40.521,318.331 66.232,303.486 66.232,333.172 66.232,362.862 40.521,348.018 	"/>
+						</g>
+					</svg>
+				</div>
+				<div class="somelink">
+					<div class="label">
+						我喜欢拍照
+						<h3><a href="/photos">照片</a></h3>
+					</div>
+					<div class="label">
+						所有文章
+						<h3><a href="/archives">归档</a></h3>
+					</div>
+					<div class="label">
+						想说些什么？
+						<h3><a href="/about">留言</a></h3>
+					</div>
+					<div class="label">
+						我在找实习找实习
+						<h3><a href="#">简历</a></h3>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div id="widget">
+			<div id="toTop">
+				<i class="indicator iconfont">&#xe664;</i>
+			</div>
+		</div>
+	</div>
+	
+<script src="/js/index.js"></script>
+
+</body>
+</html>

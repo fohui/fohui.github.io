@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>
+	
+	
+		React高阶组件 | 
+	Hexo
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+<link rel="stylesheet" href="/css/index.css">
+
+	
+<link rel="stylesheet" href="/css/nprogress.css">
+
+	
+<script src="/js/jquery-2.2.4.min.js"></script>
+
+	
+<script src="/js/lazyload.js"></script>
+
+	
+<script src="/js/nprogress.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+	<div id="container">
+		<div id="header" >
+			<div class="headerbg">
+				<div class="header-title">
+					<h1><a href="/">Hexo</a></h1>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div class="content">
+			<div class="wrap articlepage">
+<div class="breadcrumbs">
+	<h6>
+		<a href="/">Home</a>
+		<span class="partition">|</span>
+		<a href="/archives/2018">
+			2018
+		</a>
+		<span class="partition">|</span>
+		<span>React高阶组件</span>
+	</h6>
+</div>
+<div class="typo article">
+	<div class="article-meta">
+	
+	<h1 class="article-title article-title-frompost" itemprop="name">
+		React高阶组件
+	</h1>
+
+	<time class="article-date" datetime="2018-12-29T06:12:47.880Z" itemprop="datePublished">
+	2018-12-29
+	</time>
+	
+</div>
+	<div class="article-body">
+		<div class="article-content">
+			 
+				<time class="article-date-true" datetime="2018-12-29T06:12:47.880Z" itemprop="datePublished">
+					2018-12-29
+				</time>
+				<h1 id="React高阶组件"><a href="#React高阶组件" class="headerlink" title="React高阶组件"></a>React高阶组件</h1><p>#积累/react</p>
+<p>实现方式</p>
+<ol>
+<li>属性代理，传入子组件，返回包装组件</li>
+<li>反向继承，传入子组件，返回继承子组件的包装组件</li>
+</ol>
+<h2 id="属性代理"><a href="#属性代理" class="headerlink" title="属性代理"></a>属性代理</h2><h4 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123;Component&#125; from &#39;React&#39;;</span><br><span class="line">const MyContainer &#x3D; WrappedComponent &#x3D;&gt;</span><br><span class="line">  class extends Component &#123;</span><br><span class="line">    render () &#123;</span><br><span class="line">      return &lt;WrappedComponent &#123;...this.props&#125; &#x2F;&gt;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">@MyContainer </span><br><span class="line">class MyComponent extends Component &#123;</span><br><span class="line">  render () &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line">export default MyComponent;</span><br></pre></td></tr></table></figure>
+<h4 id="控制props"><a href="#控制props" class="headerlink" title="控制props"></a>控制props</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">const MyContainer &#x3D; WrappedComponent &#x3D;&gt;</span><br><span class="line">  class extends Component &#123;</span><br><span class="line">    render () &#123;</span><br><span class="line">      const newProps &#x3D; &#123;</span><br><span class="line">        text: newText,</span><br><span class="line">      &#125;;</span><br><span class="line">      return &lt;WrappedComponent &#123;...this.props&#125; &#123;...newProps&#125; &#x2F;&gt;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="通过refs使用引用"><a href="#通过refs使用引用" class="headerlink" title="通过refs使用引用"></a>通过refs使用引用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">const MyContainer &#x3D; WrappedComponent &#x3D;&gt;</span><br><span class="line">  class extends Component &#123;</span><br><span class="line">    proc (wrappedComponentInstance) &#123;</span><br><span class="line">      wrappedComponentInstance.method ();</span><br><span class="line">    &#125;</span><br><span class="line">    render () &#123;</span><br><span class="line">      const props &#x3D; Object.assign (&#123;&#125;, this.props, &#123;</span><br><span class="line">        ref: this.proc.bind (this),</span><br><span class="line">      &#125;);</span><br><span class="line">      return &lt;WrappedComponent &#123;...props&#125; &#x2F;&gt;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="抽象-state"><a href="#抽象-state" class="headerlink" title="抽象 state"></a>抽象 state</h4><p>高阶组件可以分离组件内部状态，将原组件抽象为展示型组件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">const MyContainer &#x3D; WrappedComponent &#x3D;&gt;</span><br><span class="line">  class extends Component &#123;</span><br><span class="line">    constructor (props) &#123;</span><br><span class="line">      super (props);</span><br><span class="line">      this.state &#x3D; &#123;</span><br><span class="line">        name: &#39;&#39;,</span><br><span class="line">      &#125;;</span><br><span class="line">      this.onNameChange &#x3D; this.onNameChange.bind (this);</span><br><span class="line">    &#125;</span><br><span class="line">    onNameChange (event) &#123;</span><br><span class="line">      this.setState (&#123;</span><br><span class="line">        name: event.target.value,</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    render () &#123;</span><br><span class="line">      const newProps &#x3D; &#123;</span><br><span class="line">        name: &#123;</span><br><span class="line">          value: this.state.name,</span><br><span class="line">          onChange: this.onNameChange,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;;</span><br><span class="line">      return &lt;WrappedComponent &#123;...this.props&#125; &#123;...newProps&#125; &#x2F;&gt;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;将input的name属性，和改变属性的方法，抽象到高阶组件中</span><br><span class="line">@MyContainer </span><br><span class="line">class MyComponent extends Component &#123;</span><br><span class="line">  render () &#123;</span><br><span class="line">    return &lt;input name&#x3D;&quot;name&quot; &#123;...this.props.name&#125; &#x2F;&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="使用其他元素包裹WrappedComponent"><a href="#使用其他元素包裹WrappedComponent" class="headerlink" title="使用其他元素包裹WrappedComponent"></a>使用其他元素包裹WrappedComponent</h4><p>通过高阶段组件，给传入组件设置父元素样式，组合其他组件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const MyContainer &#x3D; WrappedComponent &#x3D;&gt;</span><br><span class="line">  class extends Component &#123;</span><br><span class="line">    render () &#123;</span><br><span class="line">      return (</span><br><span class="line">        &lt;div style&#x3D;&#123;&#123;display: &#39;block&#39;&#125;&#125;&gt;</span><br><span class="line">          &lt;WrappedComponent &#123;...this.props&#125; &#x2F;&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="组件参数"><a href="#组件参数" class="headerlink" title="组件参数"></a>组件参数</h4><p>有时候调用高阶组件时需要传入一些参数 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123;Component&#125; from &#39;React&#39;;</span><br><span class="line">function HOCFactoryFactory (...params) &#123;</span><br><span class="line">  &#x2F;&#x2F; 可以做一些改变 params 的事</span><br><span class="line">  return function HOCFactory (WrappedComponent) &#123;</span><br><span class="line">    return class HOC extends Component &#123;</span><br><span class="line">      render () &#123;</span><br><span class="line">        return &lt;WrappedComponent &#123;...this.props&#125; &#x2F;&gt;;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">HOCFactoryFactory (params) (WrappedComponent); &#x2F;&#x2F; 或者</span><br><span class="line">@HOCFatoryFactory (params)</span><br><span class="line">class WrappedComponent extends React.Component &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="反向继承"><a href="#反向继承" class="headerlink" title="反向继承"></a>反向继承</h2><h4 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h4><p>传入组件，返回继承传入组件的组件，并使用super.render()来渲染新组件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const MyContainer &#x3D; WrappedComponent &#x3D;&gt;</span><br><span class="line">  class extends WrappedComponent &#123;</span><br><span class="line">    render () &#123;</span><br><span class="line">      return super.render ();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="渲染劫持"><a href="#渲染劫持" class="headerlink" title="渲染劫持"></a>渲染劫持</h4><p>高阶组件可以控制 WrappedComponent 的渲染过程 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;条件渲染</span><br><span class="line">const MyContainer &#x3D; WrappedComponent &#x3D;&gt;</span><br><span class="line">  class extends WrappedComponent &#123;</span><br><span class="line">    render () &#123;</span><br><span class="line">      if (this.props.loggedIn) &#123;</span><br><span class="line">        return super.render ();</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        return null;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="控制-state"><a href="#控制-state" class="headerlink" title="控制 state"></a>控制 state</h4><p>不建议控制state，会使得WrappedComponent 组件内部状态一团糟 。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">const MyContainer &#x3D; WrappedComponent &#x3D;&gt;</span><br><span class="line">  class extends WrappedComponent &#123;</span><br><span class="line">    render () &#123;</span><br><span class="line">      return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">          &lt;h2&gt;HOC Debugger Component&lt;&#x2F;h2&gt;</span><br><span class="line">          &lt;p&gt;Props&lt;&#x2F;p&gt; &lt;pre&gt;&#123;JSON.stringify (this.props, null, 2)&#125;&lt;&#x2F;pre&gt;</span><br><span class="line">          &lt;p&gt;State&lt;&#x2F;p&gt;</span><br><span class="line">          &lt;pre&gt;&#123;JSON.stringify (this.state, null, 2)&#125;&lt;&#x2F;pre&gt;</span><br><span class="line">          &#123;super.render ()&#125;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure>
+
+
+				
+			
+		</div>
+	</div>
+</div>
+
+
+</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="footer-container">
+			<div class="wrap">
+				<div class="personallogo">
+					<svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							 width="227.792px" height="368.981px" viewBox="0 0 227.792 368.981" style="enable-background:new 0 0 227.792 368.981;"
+							 xml:space="preserve">
+						<style type="text/css">
+							.st0{fill:#FFF100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st1{fill:#F39A00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st2{fill:#FABF00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st3{fill:#FFD900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st4{fill:#F18900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st5{fill:#F5A200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st6{fill:#FFEA00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st7{fill:#FCC800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st8{fill:#F8B100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st9{fill:#FDD100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st10{fill:#FFE200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st11{fill:#ED6F00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st12{fill:#F08000;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st13{fill:#F29100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st14{fill:#F6A900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st15{fill:#EE7800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							#logo g polygon {
+								transition: all .8s;
+							}
+							#logo:hover g polygon:nth-of-type(4n+1){
+								-webkit-transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+2){
+								-webkit-transform: translate(12%, 56%) scale(.5)  translateZ(0);
+								transform: translate(12%, 56%) scale(.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+3){
+								-webkit-transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n){
+								-webkit-transform: translate(-33%, 60%) scale(1) translateZ(0);
+								transform: translate(33%, 60%) scale(1) translateZ(0);
+								opacity: .3;
+							}				
+						</style>
+						<g>
+							<polygon class="st2" points="66.232,65.812 40.521,80.656 14.81,95.5 14.81,65.812 14.81,36.125 40.521,50.968 	"/>
+							<polygon class="st3" points="66.231,65.812 91.943,50.968 117.654,36.125 117.654,65.812 117.654,95.5 91.943,80.656 	"/>
+							<polygon class="st8" points="14.81,95.557 40.521,80.713 66.232,65.869 66.232,95.557 66.232,125.245 40.521,110.401 	"/>
+							<polygon class="st14" points="66.232,125.245 40.521,140.089 14.81,154.933 14.81,125.245 14.81,95.557 40.521,110.401 	"/>
+							<polygon class="st5" points="14.81,154.989 40.521,140.146 66.232,125.302 66.232,154.989 66.232,184.677 40.521,169.833 	"/>
+							<polygon class="st1" points="66.232,184.621 40.521,199.463 14.81,214.308 14.81,184.621 14.81,154.933 40.521,169.776 	"/>
+							<polygon class="st7" points="66.232,184.62 91.943,169.776 117.654,154.933 117.654,184.62 117.654,214.308 91.943,199.463 	"/>
+							<polygon class="st13" points="14.81,214.366 40.521,199.521 66.232,184.677 66.232,214.366 66.232,244.053 40.521,229.209 	"/>
+							<polygon class="st8" points="117.654,214.366 91.943,229.209 66.232,244.053 66.232,214.366 66.232,184.677 91.943,199.521 	"/>
+							<polygon class="st10" points="169.076,65.812 143.365,80.656 117.654,95.5 117.654,65.812 117.654,36.125 143.365,50.968 	"/>
+							<polygon class="st9" points="117.654,36.125 91.943,50.969 66.232,65.812 66.232,36.125 66.232,6.437 91.943,21.281 	"/>
+							<polygon class="st6" points="117.654,95.556 143.364,80.712 169.076,65.869 169.076,95.556 169.076,125.245 143.364,110.401 	"/>
+							<polygon class="st0" points="220.498,95.558 194.789,110.402 169.078,125.245 169.078,95.558 169.076,65.87 194.789,80.713 	"/>
+							<polygon class="st4" points="66.232,244.053 40.521,258.897 14.81,273.741 14.81,244.053 14.81,214.366 40.521,229.209 	"/>
+							<polygon class="st12" points="14.81,273.797 40.521,258.954 66.232,244.11 66.232,273.797 66.232,303.485 40.521,288.642 	"/>
+							<polygon class="st7" points="14.81,36.124 40.52,21.279 66.231,6.437 66.231,36.124 66.232,65.812 40.52,50.968 	"/>
+							<polygon class="st3" points="169.076,184.678 143.367,199.522 117.656,214.366 117.656,184.678 117.654,154.99 143.367,169.833 	
+								"/>
+							<polygon class="st15" points="66.232,303.486 40.521,318.331 14.81,333.172 14.81,303.486 14.81,273.797 40.521,288.642 	"/>
+							<polygon class="st11" points="14.81,333.172 40.521,318.331 66.232,303.486 66.232,333.172 66.232,362.862 40.521,348.018 	"/>
+						</g>
+					</svg>
+				</div>
+				<div class="somelink">
+					<div class="label">
+						我喜欢拍照
+						<h3><a href="/photos">照片</a></h3>
+					</div>
+					<div class="label">
+						所有文章
+						<h3><a href="/archives">归档</a></h3>
+					</div>
+					<div class="label">
+						想说些什么？
+						<h3><a href="/about">留言</a></h3>
+					</div>
+					<div class="label">
+						我在找实习找实习
+						<h3><a href="#">简历</a></h3>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div id="widget">
+			<div id="toTop">
+				<i class="indicator iconfont">&#xe664;</i>
+			</div>
+		</div>
+	</div>
+	
+<script src="/js/index.js"></script>
+
+</body>
+</html>

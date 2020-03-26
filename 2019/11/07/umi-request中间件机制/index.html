@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>
+	
+	
+		umi-request中间件机制 | 
+	Hexo
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+<link rel="stylesheet" href="/css/index.css">
+
+	
+<link rel="stylesheet" href="/css/nprogress.css">
+
+	
+<script src="/js/jquery-2.2.4.min.js"></script>
+
+	
+<script src="/js/lazyload.js"></script>
+
+	
+<script src="/js/nprogress.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+	<div id="container">
+		<div id="header" >
+			<div class="headerbg">
+				<div class="header-title">
+					<h1><a href="/">Hexo</a></h1>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div class="content">
+			<div class="wrap articlepage">
+<div class="breadcrumbs">
+	<h6>
+		<a href="/">Home</a>
+		<span class="partition">|</span>
+		<a href="/archives/2019">
+			2019
+		</a>
+		<span class="partition">|</span>
+		<span>umi-request中间件机制</span>
+	</h6>
+</div>
+<div class="typo article">
+	<div class="article-meta">
+	
+	<h1 class="article-title article-title-frompost" itemprop="name">
+		umi-request中间件机制
+	</h1>
+
+	<time class="article-date" datetime="2019-11-07T06:21:20.572Z" itemprop="datePublished">
+	2019-11-07
+	</time>
+	
+</div>
+	<div class="article-body">
+		<div class="article-content">
+			 
+				<time class="article-date-true" datetime="2019-11-07T06:21:20.572Z" itemprop="datePublished">
+					2019-11-07
+				</time>
+				<h1 id="umi-request中间件机制"><a href="#umi-request中间件机制" class="headerlink" title="umi-request中间件机制"></a>umi-request中间件机制</h1><p>#积累/umi</p>
+<h3 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h3><ul>
+<li>中间件机制，让开发者优雅地做请求前后的增强处理</li>
+<li>拦截器，请求前后改变url或options</li>
+</ul>
+<h4 id="中间件使用"><a href="#中间件使用" class="headerlink" title="中间件使用"></a>中间件使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 实例化request对象</span><br><span class="line">const request &#x3D; extend(&#123;</span><br><span class="line">  errorHandler,</span><br><span class="line">  credentials: &#39;include&#39;, </span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 使用request.use方法</span><br><span class="line">function noLogin(ctx, next)&#123;</span><br><span class="line">	  return next().then(()&#x3D;&gt;&#123;</span><br><span class="line">	  const &#123; res &#125; &#x3D; ctx;</span><br><span class="line">    if(typeof res &#x3D;&#x3D;&#x3D; &#39;string&#39;)&#123; </span><br><span class="line">        window.location.href &#x3D; &#96;&#x2F;index.php?g&#x3D;admin&amp;m&#x3D;public&amp;a&#x3D;login&amp;redirect_url&#x3D;$&#123;window.location.href&#125;&#96;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 或者用async&#x2F;await语法</span><br><span class="line">async function noLogin(ctx, next)&#123;</span><br><span class="line">	  await next();</span><br><span class="line">    const &#123; res &#125; &#x3D; ctx;</span><br><span class="line">    if(typeof res &#x3D;&#x3D;&#x3D; &#39;string&#39;)&#123; </span><br><span class="line">        window.location.href &#x3D; &#96;&#x2F;index.php?g&#x3D;admin&amp;m&#x3D;public&amp;a&#x3D;login&amp;redirect_url&#x3D;$&#123;window.location.href&#125;&#96;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function codeError(ctx, next)&#123;</span><br><span class="line">    return next().then(()&#x3D;&gt;&#123;</span><br><span class="line">	  const &#123; res &#125; &#x3D; ctx;</span><br><span class="line">    const &#123; code, msg &#125; &#x3D; res;</span><br><span class="line">    if(code!&#x3D;&#x3D;0)&#123;</span><br><span class="line">        message.error(msg)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">&#125;</span><br><span class="line">function logOptions(ctx, next)&#123;</span><br><span class="line">    const &#123; req &#125; &#x3D; ctx;</span><br><span class="line">    console.log(&#96;请求参数 $&#123;req.url&#125; :&#96;, req.options.data);</span><br><span class="line">    return next().then(()&#x3D;&gt;&#123;</span><br><span class="line">	  const &#123; res &#125; &#x3D; ctx;</span><br><span class="line">    console.log(&#96;接口响应 $&#123;req.url&#125; :&#96;, res)</span><br><span class="line">&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">request.use(noLogin, &#123; global: true &#125;)</span><br><span class="line">request.use(codeError, &#123; global: true &#125;)</span><br><span class="line">request.use(logOptions, &#123; global: true &#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="拦截器使用"><a href="#拦截器使用" class="headerlink" title="拦截器使用"></a>拦截器使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 请求拦截器</span><br><span class="line">function addParams(url, options)&#123;</span><br><span class="line">	return &#123;</span><br><span class="line">    url: &#96;$&#123;url&#125;&amp;interceptors&#x3D;yes&#96;,</span><br><span class="line">    options: &#123; ...options, interceptors: true &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">request.interceptors.request.use(addParams);</span><br><span class="line">request.interceptors.request.use(addfix, &#123; global: false &#125;)</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 响应拦截器</span><br><span class="line">const appendParams(response, options)&#123;</span><br><span class="line">	response.headers.append(&#39;interceptors&#39;, &#39;yes yo&#39;);</span><br><span class="line">  return response;</span><br><span class="line">&#125;</span><br><span class="line">request.interceptors.response.use(appendParams);</span><br></pre></td></tr></table></figure>
+
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>umi-request实际的执行链：<br>请求拦截器处理——&gt;中间件执行——&gt;真正发起fetch请求——&gt;响应拦截器处理——&gt;中间件执行——&gt;响应结果给model<br><img src="umi-request%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%9C%BA%E5%88%B6/A70A24C9-2DA1-4853-A3BE-B5D47F1771F4.png" alt=""></p>
+<ul>
+<li>obj对象，传递给所有拦截器和中间件，也是拦截器和中间件操作的对象。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const obj &#x3D; &#123;</span><br><span class="line">    req: &#123; url, options &#125;,</span><br><span class="line">    res: null,</span><br><span class="line">    cache: this.mapCache,</span><br><span class="line">    responseInterceptors,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li>dealRequestInterceptors，构建执行请求拦截器的promise链，得到最终的url和options</li>
+<li>on.execute，按顺序执行中间件，最后执行fetchMiddleware，发出fetch请求；得到response后，执行响应拦截器，并返回一个由中间件响应部分执行代码，倒序组成的promis链，不断执行下去。</li>
+</ul>
+
+				
+			
+		</div>
+	</div>
+</div>
+
+
+</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="footer-container">
+			<div class="wrap">
+				<div class="personallogo">
+					<svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							 width="227.792px" height="368.981px" viewBox="0 0 227.792 368.981" style="enable-background:new 0 0 227.792 368.981;"
+							 xml:space="preserve">
+						<style type="text/css">
+							.st0{fill:#FFF100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st1{fill:#F39A00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st2{fill:#FABF00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st3{fill:#FFD900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st4{fill:#F18900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st5{fill:#F5A200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st6{fill:#FFEA00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st7{fill:#FCC800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st8{fill:#F8B100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st9{fill:#FDD100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st10{fill:#FFE200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st11{fill:#ED6F00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st12{fill:#F08000;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st13{fill:#F29100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st14{fill:#F6A900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st15{fill:#EE7800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							#logo g polygon {
+								transition: all .8s;
+							}
+							#logo:hover g polygon:nth-of-type(4n+1){
+								-webkit-transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+2){
+								-webkit-transform: translate(12%, 56%) scale(.5)  translateZ(0);
+								transform: translate(12%, 56%) scale(.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+3){
+								-webkit-transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n){
+								-webkit-transform: translate(-33%, 60%) scale(1) translateZ(0);
+								transform: translate(33%, 60%) scale(1) translateZ(0);
+								opacity: .3;
+							}				
+						</style>
+						<g>
+							<polygon class="st2" points="66.232,65.812 40.521,80.656 14.81,95.5 14.81,65.812 14.81,36.125 40.521,50.968 	"/>
+							<polygon class="st3" points="66.231,65.812 91.943,50.968 117.654,36.125 117.654,65.812 117.654,95.5 91.943,80.656 	"/>
+							<polygon class="st8" points="14.81,95.557 40.521,80.713 66.232,65.869 66.232,95.557 66.232,125.245 40.521,110.401 	"/>
+							<polygon class="st14" points="66.232,125.245 40.521,140.089 14.81,154.933 14.81,125.245 14.81,95.557 40.521,110.401 	"/>
+							<polygon class="st5" points="14.81,154.989 40.521,140.146 66.232,125.302 66.232,154.989 66.232,184.677 40.521,169.833 	"/>
+							<polygon class="st1" points="66.232,184.621 40.521,199.463 14.81,214.308 14.81,184.621 14.81,154.933 40.521,169.776 	"/>
+							<polygon class="st7" points="66.232,184.62 91.943,169.776 117.654,154.933 117.654,184.62 117.654,214.308 91.943,199.463 	"/>
+							<polygon class="st13" points="14.81,214.366 40.521,199.521 66.232,184.677 66.232,214.366 66.232,244.053 40.521,229.209 	"/>
+							<polygon class="st8" points="117.654,214.366 91.943,229.209 66.232,244.053 66.232,214.366 66.232,184.677 91.943,199.521 	"/>
+							<polygon class="st10" points="169.076,65.812 143.365,80.656 117.654,95.5 117.654,65.812 117.654,36.125 143.365,50.968 	"/>
+							<polygon class="st9" points="117.654,36.125 91.943,50.969 66.232,65.812 66.232,36.125 66.232,6.437 91.943,21.281 	"/>
+							<polygon class="st6" points="117.654,95.556 143.364,80.712 169.076,65.869 169.076,95.556 169.076,125.245 143.364,110.401 	"/>
+							<polygon class="st0" points="220.498,95.558 194.789,110.402 169.078,125.245 169.078,95.558 169.076,65.87 194.789,80.713 	"/>
+							<polygon class="st4" points="66.232,244.053 40.521,258.897 14.81,273.741 14.81,244.053 14.81,214.366 40.521,229.209 	"/>
+							<polygon class="st12" points="14.81,273.797 40.521,258.954 66.232,244.11 66.232,273.797 66.232,303.485 40.521,288.642 	"/>
+							<polygon class="st7" points="14.81,36.124 40.52,21.279 66.231,6.437 66.231,36.124 66.232,65.812 40.52,50.968 	"/>
+							<polygon class="st3" points="169.076,184.678 143.367,199.522 117.656,214.366 117.656,184.678 117.654,154.99 143.367,169.833 	
+								"/>
+							<polygon class="st15" points="66.232,303.486 40.521,318.331 14.81,333.172 14.81,303.486 14.81,273.797 40.521,288.642 	"/>
+							<polygon class="st11" points="14.81,333.172 40.521,318.331 66.232,303.486 66.232,333.172 66.232,362.862 40.521,348.018 	"/>
+						</g>
+					</svg>
+				</div>
+				<div class="somelink">
+					<div class="label">
+						我喜欢拍照
+						<h3><a href="/photos">照片</a></h3>
+					</div>
+					<div class="label">
+						所有文章
+						<h3><a href="/archives">归档</a></h3>
+					</div>
+					<div class="label">
+						想说些什么？
+						<h3><a href="/about">留言</a></h3>
+					</div>
+					<div class="label">
+						我在找实习找实习
+						<h3><a href="#">简历</a></h3>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div id="widget">
+			<div id="toTop">
+				<i class="indicator iconfont">&#xe664;</i>
+			</div>
+		</div>
+	</div>
+	
+<script src="/js/index.js"></script>
+
+</body>
+</html>

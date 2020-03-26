@@ -1,0 +1,851 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+body {
+  line-height: 1;
+  color: #000;
+  background: #fff;
+}
+ol,
+ul {
+  list-style: none;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  vertical-align: middle;
+}
+caption,
+th,
+td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+a img {
+  border: none;
+}
+/*-----------------------------------------------------------------------------------*/
+/*  0.  Util
+/*-----------------------------------------------------------------------------------*/
+@font-face {
+  font-family: 'iconfont';
+  src: url("iconfont.eot");
+  src: url("iconfont.eot?#iefix") format('embedded-opentype'), url("iconfont.woff") format('woff'), url("iconfont.ttf") format('truetype'), url("iconfont.svg#iconfont") format('svg');
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 32px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+/*-----------------------------------------------------------------------------------*/
+/*  1.  Variable
+/*-----------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------*/
+/*  2.  Typography base typo.css
+/*-----------------------------------------------------------------------------------*/
+body {
+  font: 300 14px/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei;
+  color: #333;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 100;
+  color: #000;
+  line-height: 1.35;
+}
+/* 标题应该更贴紧内容，并与其他块区分，margin 值要相应做优化 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
+  line-height: 1.35;
+}
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.8em;
+}
+h3 {
+  font-size: 1.6em;
+}
+h4 {
+  font-size: 1.4em;
+}
+h5,
+h6 {
+  font-size: 1.2em;
+}
+/* 保证块/段落之间的空白隔行 */
+.typo p,
+.typo pre,
+.typo ul,
+.typo ol,
+.typo dl,
+.typo form,
+.typo hr,
+.typo table,
+blockquote {
+  margin-bottom: 1.2em;
+}
+/* 块/段落引用 */
+blockquote {
+  color: #999;
+  position: relative;
+  font-weight: 400;
+  border-left: 2px solid #f29100;
+  padding-left: 1em;
+  margin: 1em 3em 1em 2em;
+}
+@media only screen and (max-width: 640px) {
+  blockquote {
+    margin: 1em 0;
+  }
+}
+/* 解决浏览器显示代码片段时缩减太宽 */
+pre {
+  tab-size: 2;
+}
+/* 一致化 horizontal rule */
+hr {
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+  margin-bottom: 0.8em;
+  height: 10px;
+  width: 500px;
+}
+/* 在文章中，应该还原 ul 和 ol 的样式 */
+.typo ul {
+  margin-left: 1.3em;
+  list-style: disc;
+}
+.typo ol {
+  list-style: decimal;
+  margin-left: 1.9em;
+}
+.typo li ul,
+.typo li ol {
+  margin-bottom: 0.8em;
+  margin-left: 2em;
+}
+.typo li ul {
+  list-style: circle;
+}
+/* 在文章中应用 table 基本格式 */
+.typo table th,
+.typo table td,
+.typo-table th,
+.typo-table td,
+.typo table caption {
+  border: 1px solid #ddd;
+  padding: 0.5em 1em;
+  color: #666;
+}
+.typo table th,
+.typo-table th {
+  background: #fbfbfb;
+}
+.typo table thead th,
+.typo-table thead th {
+  background: #f1f1f1;
+}
+.typo table caption {
+  border-bottom: none;
+}
+/* 让链接在 hover 状态下显示下划线 */
+a {
+  color: #f29100;
+}
+a:hover {
+  color: #333;
+}
+/* Responsive images */
+.typo img {
+  max-width: 100%;
+}
+.article-body pre,
+.article-body .highlight {
+  background: #fafafa;
+  margin: 0 -20px;
+  margin-bottom: 1.2em;
+  padding: 15px 20px;
+  border-style: solid;
+  border-color: #ddd;
+  border-width: 1px 0;
+  overflow: auto;
+  color: #f29100;
+  line-height: 25.2px;
+}
+.article-body .highlight .gutter pre {
+  color: #f29100;
+  font-size: 0.85em;
+}
+.article-body pre,
+.article-body code {
+  font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+}
+.article-body code {
+  font-weight: 300;
+  color: #f29100;
+  padding: 0 0.3em;
+}
+.article-body pre code {
+  background: none;
+  text-shadow: none;
+  padding: 0;
+}
+.article-body .highlight pre {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+.article-body .highlight table {
+  margin: 0;
+  width: auto;
+}
+.article-body .highlight td {
+  border: none;
+  padding: 0;
+}
+.article-body .highlight figcaption {
+  zoom: 1;
+  font-size: 0.85em;
+  color: rgba(149,165,166,0.8);
+  line-height: 1em;
+  margin-bottom: 1em;
+}
+.article-body .highlight figcaption::before,
+.article-body .highlight figcaption::after {
+  content: " ";
+  display: table;
+}
+.article-body .highlight figcaption::after {
+  clear: both;
+}
+.article-body .highlight figcaption a {
+  float: right;
+}
+.article-body .highlight .gutter pre {
+  text-align: right;
+  padding-right: 20px;
+}
+.article-body .highlight .line {
+  height: 25.2px;
+  color: #434f54;
+}
+pre .comment {
+  color: rgba(149,165,166,0.8);
+}
+pre .title {
+  color: #800;
+  font-weight: bold;
+}
+pre .variable,
+pre .attribute,
+pre .tag,
+pre .regexp,
+pre .ruby .constant,
+pre .xml .tag .title,
+pre .xml .pi,
+pre .xml .doctype,
+pre .html .doctype,
+pre .css .id,
+pre .css .class,
+pre .css .pseudo {
+  color: #00979d;
+}
+pre .number,
+pre .preprocessor,
+pre .params,
+pre .constant {
+  color: #8a7b52;
+}
+pre .built_in,
+pre .literal {
+  color: #d35400;
+}
+pre .class,
+pre .ruby .class .title,
+pre .css .rules .attribute {
+  color: #00979d;
+}
+pre .string,
+pre .value,
+pre .inheritance,
+pre .header,
+pre .ruby .symbol,
+pre .xml .cdata {
+  color: #005c5f;
+}
+pre .function,
+pre .python .decorator,
+pre .python .title,
+pre .ruby .function .title,
+pre .ruby .title .keyword,
+pre .perl .sub,
+pre .javascript .title,
+pre .coffeescript .title {
+  color: #728e00;
+}
+pre .keyword,
+pre .javascript .function {
+  color: #00979d;
+}
+/*-----------------------------------------------------------------------------------*/
+/*  3.  Main Content Styles
+/*-----------------------------------------------------------------------------------*/
+::selection {
+  background: #4b79cf;
+  color: #fff;
+}
+#header {
+  height: 200px;
+  margin-bottom: 1.2em;
+}
+#header .headerbg {
+  position: relative;
+  height: 100%;
+  background: linear-gradient(230deg, #a24bcf, #4b79cf, #4bc5cf);
+  background-size: 5% 25%;
+  -webkit-animation: movebg 50s ease infinite;
+  -moz-animation: movebg 50s ease infinite;
+  animation: movebg 50s ease infinite;
+}
+#header .headerbg .header-title {
+  position: absolute;
+  margin-top: -1.2em;
+  font-size: 2em;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#header .headerbg .header-title h1 {
+  color: inherit;
+}
+#header .headerbg .header-title h1 a {
+  color: inherit;
+}
+#main {
+  width: 80%;
+  min-height: 400px;
+  margin: 0 auto;
+  border-bottom: 1px solid #ddd;
+}
+#main .wrap.homepage {
+  zoom: 1;
+}
+#main .wrap.homepage::before,
+#main .wrap.homepage::after {
+  content: " ";
+  display: table;
+}
+#main .wrap.homepage::after {
+  clear: both;
+}
+#main .wrap.homepage .article {
+  zoom: 1;
+}
+#main .wrap.homepage .article::before,
+#main .wrap.homepage .article::after {
+  content: " ";
+  display: table;
+}
+#main .wrap.homepage .article::after {
+  clear: both;
+}
+#main .wrap.homepage .article .article-meta {
+  float: left;
+  width: 20%;
+  margin-right: 5%;
+}
+#main .wrap.homepage .article .article-body {
+  float: right;
+  width: 75%;
+}
+#main .wrap.articlepage {
+  width: 70%;
+  margin: 0 auto;
+}
+#main .wrap.articlepage .article-meta {
+  margin: 0 -200px;
+}
+#main .wrap.articlepage .article-meta .article-date {
+  display: none;
+}
+#main .wrap.articlepage .article-meta .article-title {
+  font-size: 3em;
+  margin-bottom: 2em;
+  font-weight: 200;
+}
+#main .wrap.articlepage .article-date-true {
+  position: absolute;
+  margin-left: -200px;
+  color: #999;
+}
+#main .wrap.otherpage .article-date {
+  display: none;
+}
+.content .breadcrumbs {
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
+  line-height: 1.35;
+  font-weight: 100;
+  font-size: 1.2em;
+  padding-left: 20px;
+}
+.content .breadcrumbs .partition {
+  transform: rotate(45deg);
+  display: inline-block;
+  padding: 0 10px;
+}
+.article {
+  position: relative;
+  padding: 20px;
+  animation: fadeUp 0.8s;
+}
+.article-meta .article-date {
+  color: #999;
+}
+.article-meta .article-title a {
+  text-decoration: none;
+}
+#main-nav {
+  display: none;
+}
+.archives-byyear {
+  position: relative;
+  margin-bottom: 25px;
+  animation: fadeUp 1s;
+}
+.archives-byyear .archives-year {
+  position: absolute;
+  left: -100px;
+}
+.archives-byyear .archives-year h1 {
+  font-size: 3em;
+}
+.archives-item {
+  display: table;
+  height: 100px;
+  width: 100%;
+  position: relative;
+  vertical-align: middle;
+  text-align: center;
+}
+.archives-item .article-meta {
+  display: table-cell;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.archives-item .article-meta a {
+  color: #333;
+  text-decoration: none;
+}
+.archives-item .color {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 0;
+  transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+  z-index: -1;
+}
+.archives-item .color.left {
+  left: 50%;
+}
+.archives-item .color.right {
+  right: 50%;
+}
+.archives-item:hover {
+  color: #fff;
+}
+.archives-item:hover a,
+.archives-item:hover .article-date {
+  color: #fff;
+}
+.archives-item:hover .color {
+  background-color: #4b79cf;
+  width: 50%;
+}
+.pagination-wrap {
+  text-align: center;
+}
+.pagination-wrap .pagination {
+  display: inline-block;
+}
+.pagination-wrap .pagination h6 {
+  display: inline-block;
+}
+.pagination-wrap .pagination .partition {
+  transform: rotate(45deg);
+  display: inline-block;
+  padding: 0 10px;
+}
+#toTop {
+  display: none;
+  animation-duration: 0.8s;
+  width: 0;
+  height: 0;
+  border: 40px solid #f29100;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+}
+#toTop:hover {
+  cursor: pointer;
+}
+#toTop .indicator {
+  position: relative;
+  top: -10px;
+  color: #fff;
+}
+#footer {
+  background: linear-gradient(to bottom, #fff 0%, #fff 50%, #4b79cf 50%, #4b79cf 100%);
+}
+#footer .footer-container {
+  text-align: center;
+  vertical-align: bottom;
+  background: url("bottombg.svg");
+  background-position: top left;
+  background-repeat: no-repeat;
+}
+#footer .wrap {
+  zoom: 1;
+  display: inline-block;
+  margin-top: 200px;
+}
+#footer .wrap::before,
+#footer .wrap::after {
+  content: " ";
+  display: table;
+}
+#footer .wrap::after {
+  clear: both;
+}
+#footer .personallogo {
+  float: left;
+  margin-right: 200px;
+}
+#footer .personallogo svg {
+  width: 100px;
+  height: 200px;
+  cursor: pointer;
+}
+#footer .somelink {
+  float: left;
+  text-align: left;
+}
+#footer .somelink .label {
+  padding-bottom: 10px;
+  color: #f29100;
+}
+#footer .somelink .label h3 {
+  padding-left: 20px;
+  margin-top: 0;
+}
+#footer .somelink .label h3 a {
+  color: #fff;
+  text-decoration: none;
+}
+#footer .somelink .label h3 a::after {
+  content: " ";
+  display: block;
+  height: 1px;
+  width: 0;
+  background-color: #fff;
+  transition: width 0.5s;
+}
+#footer .somelink .label h3 a:hover::after {
+  width: 50%;
+}
+/*-----------------------------------------------------------------------------------*/
+/*  4.  Responsive
+/*-----------------------------------------------------------------------------------*/
+@media screen and (max-width: 479px) {
+  #main {
+    width: 100%;
+    min-width: 320px;
+  }
+  #main .wrap.articlepage {
+    width: 90%;
+  }
+  #main .wrap.articlepage .breadcrumbs h6 {
+    font-size: 1em;
+  }
+  #main .wrap.articlepage .article {
+    padding: 0;
+  }
+  #main .wrap.articlepage .article .article-meta {
+    max-width: 100%;
+    margin: 1em 0 0.5em;
+    font-weight: 100;
+  }
+  #main .wrap.homepage .article .article-meta {
+    float: none;
+    width: 100%;
+  }
+  #main .wrap.homepage .article .article-body {
+    float: none;
+    width: 100%;
+  }
+  #main .wrap.archivespage .archives-byyear .archives-year {
+    position: static;
+    text-align: center;
+  }
+  #footer .personallogo {
+    float: none;
+    margin-right: 0;
+  }
+  #footer .somelink {
+    float: none;
+  }
+}
+@media screen and (min-width: 480px) and (max-width: 768px) {
+  #main {
+    width: 100%;
+  }
+  #main .wrap.articlepage {
+    width: 80%;
+  }
+  #main .wrap.articlepage .article .article-meta {
+    max-width: 100%;
+    margin: 1em 0 0.5em;
+    font-weight: 100;
+  }
+  #main .wrap.homepage .article .article-meta {
+    float: none;
+    width: 100%;
+  }
+  #main .wrap.homepage .article .article-body {
+    float: none;
+    width: 100%;
+  }
+  #main .wrap.archivespage .archives-byyear .archives-year {
+    position: static;
+    text-align: center;
+  }
+}
+.ds-post-button {
+  background-color: #4b79cf;
+}
+/*-----------------------------------------------------------------------------------*/
+/*  5.  Animation
+/*-----------------------------------------------------------------------------------*/
+@-moz-keyframes movebg {
+  0% {
+    background-position: 0% 84%;
+  }
+  50% {
+    background-position: 100% 16%;
+  }
+  100% {
+    background-position: 0% 84%;
+  }
+}
+@-webkit-keyframes movebg {
+  0% {
+    background-position: 0% 84%;
+  }
+  50% {
+    background-position: 100% 16%;
+  }
+  100% {
+    background-position: 0% 84%;
+  }
+}
+@-o-keyframes movebg {
+  0% {
+    background-position: 0% 84%;
+  }
+  50% {
+    background-position: 100% 16%;
+  }
+  100% {
+    background-position: 0% 84%;
+  }
+}
+@keyframes movebg {
+  0% {
+    background-position: 0% 84%;
+  }
+  50% {
+    background-position: 100% 16%;
+  }
+  100% {
+    background-position: 0% 84%;
+  }
+}
+@-moz-keyframes fadeUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@-webkit-keyframes fadeUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@-o-keyframes fadeUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@-moz-keyframes fadeDown {
+  from {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+}
+@-webkit-keyframes fadeDown {
+  from {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+}
+@-o-keyframes fadeDown {
+  from {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+}
+@keyframes fadeDown {
+  from {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+  }
+}

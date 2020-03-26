@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>
+	
+	
+		JavaScript执行原理 | 
+	Hexo
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+<link rel="stylesheet" href="/css/index.css">
+
+	
+<link rel="stylesheet" href="/css/nprogress.css">
+
+	
+<script src="/js/jquery-2.2.4.min.js"></script>
+
+	
+<script src="/js/lazyload.js"></script>
+
+	
+<script src="/js/nprogress.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+	<div id="container">
+		<div id="header" >
+			<div class="headerbg">
+				<div class="header-title">
+					<h1><a href="/">Hexo</a></h1>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div class="content">
+			<div class="wrap articlepage">
+<div class="breadcrumbs">
+	<h6>
+		<a href="/">Home</a>
+		<span class="partition">|</span>
+		<a href="/archives/2020">
+			2020
+		</a>
+		<span class="partition">|</span>
+		<span>JavaScript执行原理</span>
+	</h6>
+</div>
+<div class="typo article">
+	<div class="article-meta">
+	
+	<h1 class="article-title article-title-frompost" itemprop="name">
+		JavaScript执行原理
+	</h1>
+
+	<time class="article-date" datetime="2020-02-22T12:35:52.290Z" itemprop="datePublished">
+	2020-02-22
+	</time>
+	
+</div>
+	<div class="article-body">
+		<div class="article-content">
+			 
+				<time class="article-date-true" datetime="2020-02-22T12:35:52.290Z" itemprop="datePublished">
+					2020-02-22
+				</time>
+				<h1 id="JavaScript执行原理"><a href="#JavaScript执行原理" class="headerlink" title="JavaScript执行原理"></a>JavaScript执行原理</h1><p>#积累/浏览器原理</p>
+<p>一段 JavaScript 代码在执行之前需要被 JavaScript 引擎编译，编译完成之后，才会进入执行阶段。<br><img src="JavaScript%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86/649c6e3b5509ffd40e13ce9c91b3d91e.png" alt=""></p>
+<h2 id="编译阶段"><a href="#编译阶段" class="headerlink" title="编译阶段"></a>编译阶段</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">showName()</span><br><span class="line">console.log(myname)</span><br><span class="line">var myname &#x3D; &#39;极客时间&#39;</span><br><span class="line">function showName() &#123; </span><br><span class="line">	console.log(&#39;函数showName被执行&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面一段JavaScript代码编译之后，会生成两部分内容：<strong>执行上下文和可执行代码</strong>。<br><img src="JavaScript%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86/0655d18ec347a95dfbf843969a921a13.png" alt=""></p>
+<h4 id="执行上下文"><a href="#执行上下文" class="headerlink" title="执行上下文"></a>执行上下文</h4><p>执行上下文是JavaScript执行一段代码时的运行环境，比如调用一个函数，就会进入这个函数的执行上下文，确定该函数在执行期间用到的诸如 this、变量、对象以及函数等。<br>执行上下文包括三种：全局执行上下文、函数执行上下文、eval执行上下文。</p>
+<p><img src="JavaScript%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86/b398610fd8060b381d33afc9b86f988d.png" alt=""><br>执行上下文中包括变量环境、词法环境、outer和this变量。<br>变量环境：保存函数声明和var声明的变量；<br>词法环境：保存let、const声明的块级作用域变量；<br>outer：一个外部引用，用来指向外部的执行上下文，构成作用域链；<br>this：this是和执行上下文绑定的，每个执行上下文中都有一个 this。</p>
+<h4 id="作用域链"><a href="#作用域链" class="headerlink" title="作用域链"></a>作用域链</h4><p><img src="JavaScript%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86/25053af5ae30c8be991fa14631cde0a7.png" alt=""><br>变量的查找：先在函数执行上下文词法环境中查找，然后到变量环境；接着会到外层执行上下文继续查找，直至全局执行上下文。</p>
+<h4 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h4><p>作用域链作用于变量查找，而<strong>对象属性</strong>的查找则依赖于原型链。<br>原型链的构建：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">var o &#x3D; &#123;a: 1&#125;;</span><br><span class="line">&#x2F;&#x2F;原型链: o ---&gt; Object.prototype ---&gt; null</span><br><span class="line"></span><br><span class="line">var a &#x3D; [&quot;yo&quot;, &quot;whadup&quot;, &quot;?&quot;];</span><br><span class="line">&#x2F;&#x2F;原型链: a ---&gt; Array.prototype ---&gt; Object.prototype ---&gt; null</span><br><span class="line"></span><br><span class="line">function f()&#123; return 2; &#125;</span><br><span class="line">&#x2F;&#x2F;原型链: f ---&gt; Function.prototype ---&gt; Object.prototype ---&gt; null</span><br><span class="line"></span><br><span class="line">function Graph() &#123;</span><br><span class="line">  this.vertices &#x3D; [];</span><br><span class="line">  this.edges &#x3D; [];</span><br><span class="line">&#125;</span><br><span class="line">Graph.prototype &#x3D; &#123;</span><br><span class="line">  addVertex: function(v)&#123;</span><br><span class="line">    this.vertices.push(v);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">var g &#x3D; new Graph();</span><br><span class="line">&#x2F;&#x2F;原型链: g ---&gt; Graph.prototype ---&gt; Function.prototype ---&gt; Object.prototype ---&gt; null</span><br><span class="line"></span><br><span class="line">var a &#x3D; &#123;a: 1&#125;; </span><br><span class="line">var b &#x3D; Object.create(a);</span><br><span class="line">var c &#x3D; Object.create(b);</span><br><span class="line">&#x2F;&#x2F; c ---&gt; b ---&gt; a ---&gt; Object.prototype ---&gt; null</span><br><span class="line">&#x2F;&#x2F; 新对象的原型就是调用 create 方法时传入的第一个参数</span><br></pre></td></tr></table></figure>
+
+<h4 id="调用栈"><a href="#调用栈" class="headerlink" title="调用栈"></a>调用栈</h4><p>JavaScript属于解释型语言，<strong>每次运行时都需要</strong>通过解释器对程序进行动态解释和执行。<br>例如一段下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var a &#x3D; 2</span><br><span class="line">function add(b,c)&#123; </span><br><span class="line">	return b+c</span><br><span class="line">&#125;</span><br><span class="line">function addAll(b,c)&#123;</span><br><span class="line">	var d &#x3D; 10</span><br><span class="line">	result &#x3D; add(b,c)</span><br><span class="line">	return a+result+d</span><br><span class="line">&#125;</span><br><span class="line">addAll(3,6)</span><br></pre></td></tr></table></figure>
+<p>执行过程如下：</p>
+<ol>
+<li>编译全局代码，生成全局执行上下文，开始执行全局代码；</li>
+<li>调用addAll函数，<strong>编译该函数生成addAll函数执行上下文</strong>，开始执行函数内部代码；</li>
+<li>调用add函数，<strong>编译该函数并生成add函数执行上下文</strong>，开始执行add函数内部代码；</li>
+<li>add函数返回执行，该函数执行上下文从调用栈中弹出；</li>
+<li>addAll函数返回执行，该函数执行上下文从调用栈中弹出；</li>
+<li>JavaScript执行结束。</li>
+</ol>
+<h2 id="执行阶段"><a href="#执行阶段" class="headerlink" title="执行阶段"></a>执行阶段</h2><p>JavaScript 引擎开始执行“可执行代码”，按照顺序一行一行地执行。当执行函数和变量时，便在变量环境对象中查找。</p>
+
+				
+			
+		</div>
+	</div>
+</div>
+
+
+</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="footer-container">
+			<div class="wrap">
+				<div class="personallogo">
+					<svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							 width="227.792px" height="368.981px" viewBox="0 0 227.792 368.981" style="enable-background:new 0 0 227.792 368.981;"
+							 xml:space="preserve">
+						<style type="text/css">
+							.st0{fill:#FFF100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st1{fill:#F39A00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st2{fill:#FABF00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st3{fill:#FFD900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st4{fill:#F18900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st5{fill:#F5A200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st6{fill:#FFEA00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st7{fill:#FCC800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st8{fill:#F8B100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st9{fill:#FDD100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st10{fill:#FFE200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st11{fill:#ED6F00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st12{fill:#F08000;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st13{fill:#F29100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st14{fill:#F6A900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st15{fill:#EE7800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							#logo g polygon {
+								transition: all .8s;
+							}
+							#logo:hover g polygon:nth-of-type(4n+1){
+								-webkit-transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+2){
+								-webkit-transform: translate(12%, 56%) scale(.5)  translateZ(0);
+								transform: translate(12%, 56%) scale(.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+3){
+								-webkit-transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n){
+								-webkit-transform: translate(-33%, 60%) scale(1) translateZ(0);
+								transform: translate(33%, 60%) scale(1) translateZ(0);
+								opacity: .3;
+							}				
+						</style>
+						<g>
+							<polygon class="st2" points="66.232,65.812 40.521,80.656 14.81,95.5 14.81,65.812 14.81,36.125 40.521,50.968 	"/>
+							<polygon class="st3" points="66.231,65.812 91.943,50.968 117.654,36.125 117.654,65.812 117.654,95.5 91.943,80.656 	"/>
+							<polygon class="st8" points="14.81,95.557 40.521,80.713 66.232,65.869 66.232,95.557 66.232,125.245 40.521,110.401 	"/>
+							<polygon class="st14" points="66.232,125.245 40.521,140.089 14.81,154.933 14.81,125.245 14.81,95.557 40.521,110.401 	"/>
+							<polygon class="st5" points="14.81,154.989 40.521,140.146 66.232,125.302 66.232,154.989 66.232,184.677 40.521,169.833 	"/>
+							<polygon class="st1" points="66.232,184.621 40.521,199.463 14.81,214.308 14.81,184.621 14.81,154.933 40.521,169.776 	"/>
+							<polygon class="st7" points="66.232,184.62 91.943,169.776 117.654,154.933 117.654,184.62 117.654,214.308 91.943,199.463 	"/>
+							<polygon class="st13" points="14.81,214.366 40.521,199.521 66.232,184.677 66.232,214.366 66.232,244.053 40.521,229.209 	"/>
+							<polygon class="st8" points="117.654,214.366 91.943,229.209 66.232,244.053 66.232,214.366 66.232,184.677 91.943,199.521 	"/>
+							<polygon class="st10" points="169.076,65.812 143.365,80.656 117.654,95.5 117.654,65.812 117.654,36.125 143.365,50.968 	"/>
+							<polygon class="st9" points="117.654,36.125 91.943,50.969 66.232,65.812 66.232,36.125 66.232,6.437 91.943,21.281 	"/>
+							<polygon class="st6" points="117.654,95.556 143.364,80.712 169.076,65.869 169.076,95.556 169.076,125.245 143.364,110.401 	"/>
+							<polygon class="st0" points="220.498,95.558 194.789,110.402 169.078,125.245 169.078,95.558 169.076,65.87 194.789,80.713 	"/>
+							<polygon class="st4" points="66.232,244.053 40.521,258.897 14.81,273.741 14.81,244.053 14.81,214.366 40.521,229.209 	"/>
+							<polygon class="st12" points="14.81,273.797 40.521,258.954 66.232,244.11 66.232,273.797 66.232,303.485 40.521,288.642 	"/>
+							<polygon class="st7" points="14.81,36.124 40.52,21.279 66.231,6.437 66.231,36.124 66.232,65.812 40.52,50.968 	"/>
+							<polygon class="st3" points="169.076,184.678 143.367,199.522 117.656,214.366 117.656,184.678 117.654,154.99 143.367,169.833 	
+								"/>
+							<polygon class="st15" points="66.232,303.486 40.521,318.331 14.81,333.172 14.81,303.486 14.81,273.797 40.521,288.642 	"/>
+							<polygon class="st11" points="14.81,333.172 40.521,318.331 66.232,303.486 66.232,333.172 66.232,362.862 40.521,348.018 	"/>
+						</g>
+					</svg>
+				</div>
+				<div class="somelink">
+					<div class="label">
+						我喜欢拍照
+						<h3><a href="/photos">照片</a></h3>
+					</div>
+					<div class="label">
+						所有文章
+						<h3><a href="/archives">归档</a></h3>
+					</div>
+					<div class="label">
+						想说些什么？
+						<h3><a href="/about">留言</a></h3>
+					</div>
+					<div class="label">
+						我在找实习找实习
+						<h3><a href="#">简历</a></h3>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div id="widget">
+			<div id="toTop">
+				<i class="indicator iconfont">&#xe664;</i>
+			</div>
+		</div>
+	</div>
+	
+<script src="/js/index.js"></script>
+
+</body>
+</html>

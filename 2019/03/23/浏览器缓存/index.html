@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>
+	
+	
+		浏览器缓存 | 
+	Hexo
+	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+<link rel="stylesheet" href="/css/index.css">
+
+	
+<link rel="stylesheet" href="/css/nprogress.css">
+
+	
+<script src="/js/jquery-2.2.4.min.js"></script>
+
+	
+<script src="/js/lazyload.js"></script>
+
+	
+<script src="/js/nprogress.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+	<div id="container">
+		<div id="header" >
+			<div class="headerbg">
+				<div class="header-title">
+					<h1><a href="/">Hexo</a></h1>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div class="content">
+			<div class="wrap articlepage">
+<div class="breadcrumbs">
+	<h6>
+		<a href="/">Home</a>
+		<span class="partition">|</span>
+		<a href="/archives/2019">
+			2019
+		</a>
+		<span class="partition">|</span>
+		<span>浏览器缓存</span>
+	</h6>
+</div>
+<div class="typo article">
+	<div class="article-meta">
+	
+	<h1 class="article-title article-title-frompost" itemprop="name">
+		浏览器缓存
+	</h1>
+
+	<time class="article-date" datetime="2019-03-23T10:10:23.215Z" itemprop="datePublished">
+	2019-03-23
+	</time>
+	
+</div>
+	<div class="article-body">
+		<div class="article-content">
+			 
+				<time class="article-date-true" datetime="2019-03-23T10:10:23.215Z" itemprop="datePublished">
+					2019-03-23
+				</time>
+				<h1 id="浏览器缓存"><a href="#浏览器缓存" class="headerlink" title="浏览器缓存"></a>浏览器缓存</h1><p>#积累/浏览器原理</p>
+<h3 id="缓存查找流程"><a href="#缓存查找流程" class="headerlink" title="缓存查找流程"></a>缓存查找流程</h3><p><img src="%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/5fc2f88a04ee0fc41a808f3481287408.png" alt=""></p>
+<ol>
+<li>发起资源请求，首先浏览器会在浏览器缓存中查找是否有请求的文件，如果有缓存的文件，且缓存未过期，则使用缓存；</li>
+<li>如果没有缓存该文件，则向服务器发起请求，服务器直接响应内容；</li>
+<li>如果有缓存的文件，但缓存时间过期，则携带缓存文件标识符正式发起请求。服务器根据标示符比对文件是否有更新，如果未修改，则响应304，使用过期缓存；如果已经更新，则直接响应内容。</li>
+</ol>
+<h3 id="什么是强制缓存和协商缓存？"><a href="#什么是强制缓存和协商缓存？" class="headerlink" title="什么是强制缓存和协商缓存？"></a>什么是强制缓存和协商缓存？</h3><p>强制缓存就是向浏览器缓存查找该请求结果，并根据该结果的缓存规则来<strong>决定是否使用该缓存结果</strong>的过程。<br>协商缓存就是强制缓存失效后，浏览器携带缓存标识向服务器发起请求，由服务器<strong>根据缓存标识决定是否使用缓存</strong>的过程</p>
+<h3 id="服务器是通过什么方式让浏览器缓存数据的？"><a href="#服务器是通过什么方式让浏览器缓存数据的？" class="headerlink" title="服务器是通过什么方式让浏览器缓存数据的？"></a>服务器是通过什么方式让浏览器缓存数据的？</h3><p>::Cache-Control / Expires::<br>当服务器返回 HTTP 响应头给浏览器时，浏览器是通过响应头中的 Cache-Control字段(HTTP/1.1)或Expires字段(HTTP/1.0)来设置是否缓存该资源。<br>比如上图设置的缓存过期时间是 2000 秒：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control:Max-age&#x3D;2000</span><br></pre></td></tr></table></figure>
+<p>也根据Cache-Control或Expires来判断资源是否过期，如果未过期则使用缓存文件，如果过期则正式发起请求</p>
+<ul>
+<li>Cache-Control和Expires同时存在时，只有Cache-Control生效。</li>
+</ul>
+<h3 id="服务器如何比对资源是否修改？"><a href="#服务器如何比对资源是否修改？" class="headerlink" title="服务器如何比对资源是否修改？"></a>服务器如何比对资源是否修改？</h3><p>::Last-Modified / If-Modified-Since::<br>Last-Modified是服务器响应请求时，返回该资源文件在服务器最后被修改的时间；<br>If-Modified-Since则是客户端再次发起请求时，携带上次请求返回的Last-Modified值，通过此字段值告诉服务器该资源上次请求返回的最后被修改时间；<br>服务器根据If-Modified-Since信息和该资源在服务器的最后被修改时间，判断响应304，还是响应新内容。</p>
+<p>::Etag / If-None-Match::<br>Etag是服务器响应时，返回当前资源文件的一个唯一标识(由服务器生成)；<br>If-None-Match是浏览器发现缓存过期再次请求时，携带的上次请求返回的唯一标识Etag值；<br>服务器根据If-None-Match的字段值与该资源在服务器的Etag值做对比，如果文件未更新则响应304，如果已更新则响应新内容。</p>
+<ul>
+<li>Etag / If-None-Match优先级高于Last-Modified / If-Modified-Since，同时存在则只有Etag / If-None-Match生效。</li>
+</ul>
+<h3 id="Ctrl-F5和F5有什么区别"><a href="#Ctrl-F5和F5有什么区别" class="headerlink" title="Ctrl+F5和F5有什么区别?"></a>Ctrl+F5和F5有什么区别?</h3><ul>
+<li>一个是强制刷新，也就是资源都走网络。</li>
+<li>一个是正常处理流程，缓存机制还起作用。还包括这些浏览器操作：在URI输入栏中输入地址并回车、右键菜单重新加载、点击工具栏中的刷新按钮</li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="Cache-control参数"><a href="#Cache-control参数" class="headerlink" title="Cache-control参数"></a>Cache-control参数</h4><p><code>Cache-Control</code>定义资源的缓存策略</p>
+<ul>
+<li>no-cache, no-store<br>no-cache: 浏览器不做缓存，每次请求资源都会<strong>发起请求</strong>，etag没有变化、服务器返回304，则不再重新下载资源；<br>no-store：浏览器和cdn均不做缓存，并且每次请求资源都会发起请求，并<strong>重新下载资源</strong>。</li>
+<li>public, private<br>当存在私密信息、时效性高的数据，则需要设置。<br>public: 可以缓存，即使保护用户隐私信息；<br>private：不允许cdn缓存，防止用户信息泄露。</li>
+<li>max-age<br>指定从请求开始，允许被重用的最长时间（单位秒）。<br>当设置了max-age，<strong>资源在指定的时间内不会发送请求到服务器</strong></li>
+<li>例子<br>max-age=86400：<br>浏览器以及任何中间缓存均可将响应（如果是“public”响应）缓存长达 1 天（60 秒 x 60 分钟 x 24 小时）。<br>private, max-age=600：<br>客户端的浏览器只能将响应缓存最长 10 分钟（60 秒 x 10 分钟）。<br>no-store：<br>不允许缓存响应，每次请求都必须完整获取。</li>
+<li>nginx配置cache-control<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.(css|js|swf|php|htm|html )$ &#123;</span><br><span class="line">	add_header Cache-Control no-store;</span><br><span class="line">	add_header Pragma no-cache;</span><br><span class="line">&#125;</span><br><span class="line">location ~* \.(gif|jpg|jpeg|bmp|png|ico|txt|js|css)$ &#123;</span><br><span class="line">	expires  30d;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location ~* \.html?$ &#123;</span><br><span class="line">	expires  10m;</span><br><span class="line">&#125;</span><br><span class="line">最终响应中会添加以下属性：</span><br><span class="line">* ### Cache-Control:max-age&#x3D;600</span><br><span class="line">* ### Expires:Sat, 23 Mar 2019 14:37:35 GMT</span><br><span class="line">* ### ETag:&quot;5c962c53-15b&quot;</span><br><span class="line">* ### Last-Modified:Sat, 23 Mar 2019 12:53:39 GMT</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="配置Etag"><a href="#配置Etag" class="headerlink" title="配置Etag"></a>配置Etag</h4><ul>
+<li>服务器会响应ETag，去唯一标示资源。当资源有变化，ETag也会改变。</li>
+<li>客户端收到ETag之后，浏览器会在请求头中加入If-None-Match，传递ETag值。</li>
+<li>服务器比对ETag，发现没有变化，则可以通过响应304 Not Modified，来避免重新下载资源。</li>
+<li>nginx开启ETag<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">http&#123;</span><br><span class="line">	...</span><br><span class="line">	etag on;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="缓存策略"><a href="#缓存策略" class="headerlink" title="缓存策略"></a>缓存策略</h4><p><img src="%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/http-cache-hierarchy.png" alt=""></p>
+<ul>
+<li>入口文件设置no-cache，不做缓存；</li>
+<li>所有图片、静态文件，都做长时间的缓存</li>
+<li>所有图片、静态文件，文件名设置hash值，并每天更新同时更改入口文件的引入文件名</li>
+</ul>
+
+				
+			
+		</div>
+	</div>
+</div>
+
+
+</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div class="footer-container">
+			<div class="wrap">
+				<div class="personallogo">
+					<svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+							 width="227.792px" height="368.981px" viewBox="0 0 227.792 368.981" style="enable-background:new 0 0 227.792 368.981;"
+							 xml:space="preserve">
+						<style type="text/css">
+							.st0{fill:#FFF100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st1{fill:#F39A00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st2{fill:#FABF00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st3{fill:#FFD900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st4{fill:#F18900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st5{fill:#F5A200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st6{fill:#FFEA00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st7{fill:#FCC800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st8{fill:#F8B100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st9{fill:#FDD100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st10{fill:#FFE200;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st11{fill:#ED6F00;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st12{fill:#F08000;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st13{fill:#F29100;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st14{fill:#F6A900;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							.st15{fill:#EE7800;stroke:#FFFFFF;stroke-linejoin:round;stroke-miterlimit:10;}
+							#logo g polygon {
+								transition: all .8s;
+							}
+							#logo:hover g polygon:nth-of-type(4n+1){
+								-webkit-transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    transform: translate(56%, -65%) scale(1.5)  translateZ(0);
+							    opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+2){
+								-webkit-transform: translate(12%, 56%) scale(.5)  translateZ(0);
+								transform: translate(12%, 56%) scale(.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n+3){
+								-webkit-transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								transform: translate(-76%, 88%) scale(1.5) translateZ(0);
+								opacity: .3;
+							}
+							#logo:hover g polygon:nth-of-type(4n){
+								-webkit-transform: translate(-33%, 60%) scale(1) translateZ(0);
+								transform: translate(33%, 60%) scale(1) translateZ(0);
+								opacity: .3;
+							}				
+						</style>
+						<g>
+							<polygon class="st2" points="66.232,65.812 40.521,80.656 14.81,95.5 14.81,65.812 14.81,36.125 40.521,50.968 	"/>
+							<polygon class="st3" points="66.231,65.812 91.943,50.968 117.654,36.125 117.654,65.812 117.654,95.5 91.943,80.656 	"/>
+							<polygon class="st8" points="14.81,95.557 40.521,80.713 66.232,65.869 66.232,95.557 66.232,125.245 40.521,110.401 	"/>
+							<polygon class="st14" points="66.232,125.245 40.521,140.089 14.81,154.933 14.81,125.245 14.81,95.557 40.521,110.401 	"/>
+							<polygon class="st5" points="14.81,154.989 40.521,140.146 66.232,125.302 66.232,154.989 66.232,184.677 40.521,169.833 	"/>
+							<polygon class="st1" points="66.232,184.621 40.521,199.463 14.81,214.308 14.81,184.621 14.81,154.933 40.521,169.776 	"/>
+							<polygon class="st7" points="66.232,184.62 91.943,169.776 117.654,154.933 117.654,184.62 117.654,214.308 91.943,199.463 	"/>
+							<polygon class="st13" points="14.81,214.366 40.521,199.521 66.232,184.677 66.232,214.366 66.232,244.053 40.521,229.209 	"/>
+							<polygon class="st8" points="117.654,214.366 91.943,229.209 66.232,244.053 66.232,214.366 66.232,184.677 91.943,199.521 	"/>
+							<polygon class="st10" points="169.076,65.812 143.365,80.656 117.654,95.5 117.654,65.812 117.654,36.125 143.365,50.968 	"/>
+							<polygon class="st9" points="117.654,36.125 91.943,50.969 66.232,65.812 66.232,36.125 66.232,6.437 91.943,21.281 	"/>
+							<polygon class="st6" points="117.654,95.556 143.364,80.712 169.076,65.869 169.076,95.556 169.076,125.245 143.364,110.401 	"/>
+							<polygon class="st0" points="220.498,95.558 194.789,110.402 169.078,125.245 169.078,95.558 169.076,65.87 194.789,80.713 	"/>
+							<polygon class="st4" points="66.232,244.053 40.521,258.897 14.81,273.741 14.81,244.053 14.81,214.366 40.521,229.209 	"/>
+							<polygon class="st12" points="14.81,273.797 40.521,258.954 66.232,244.11 66.232,273.797 66.232,303.485 40.521,288.642 	"/>
+							<polygon class="st7" points="14.81,36.124 40.52,21.279 66.231,6.437 66.231,36.124 66.232,65.812 40.52,50.968 	"/>
+							<polygon class="st3" points="169.076,184.678 143.367,199.522 117.656,214.366 117.656,184.678 117.654,154.99 143.367,169.833 	
+								"/>
+							<polygon class="st15" points="66.232,303.486 40.521,318.331 14.81,333.172 14.81,303.486 14.81,273.797 40.521,288.642 	"/>
+							<polygon class="st11" points="14.81,333.172 40.521,318.331 66.232,303.486 66.232,333.172 66.232,362.862 40.521,348.018 	"/>
+						</g>
+					</svg>
+				</div>
+				<div class="somelink">
+					<div class="label">
+						我喜欢拍照
+						<h3><a href="/photos">照片</a></h3>
+					</div>
+					<div class="label">
+						所有文章
+						<h3><a href="/archives">归档</a></h3>
+					</div>
+					<div class="label">
+						想说些什么？
+						<h3><a href="/about">留言</a></h3>
+					</div>
+					<div class="label">
+						我在找实习找实习
+						<h3><a href="#">简历</a></h3>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div id="widget">
+			<div id="toTop">
+				<i class="indicator iconfont">&#xe664;</i>
+			</div>
+		</div>
+	</div>
+	
+<script src="/js/index.js"></script>
+
+</body>
+</html>
